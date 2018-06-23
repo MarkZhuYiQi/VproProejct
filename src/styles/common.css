@@ -1,0 +1,54 @@
+*{
+    padding:0;
+    margin:0;
+    font-family: "Microsoft YaHei", Verdana, Arial, Helvetica, sans-serif;
+}
+body{
+    background:#eee;
+    /*font-family: "Microsoft YaHei", Verdana, Arial, Helvetica, sans-serif;*/
+}
+.nav-container{
+    background:#FF4949;
+}
+#navbar{
+    /*background-color:#FF4949;*/
+    width:1200px;
+    margin:0 auto;
+    text-align:center;
+}
+#logo{
+    width:100%;
+    line-height:68px;
+    padding:15px 0;
+}
+#head{
+    position:relative;
+    top:0px;
+    border-radius:14px;
+    width: 28px;
+}
+#navbar .el-menu--horizontal{
+    border-bottom: none;
+}
+#navbar .el-menu{
+    border-right: none;
+    background-color:#FF4949;
+    height:80px;
+    line-height:80px;
+}
+#navbar .el-menu .el-menu-item{
+    height:80px;
+    line-height:80px;
+    color:#fff;
+}
+.box{
+    padding:30px 50px 30px 30px;
+}
+.card-container{
+    width:1200px;
+    margin:0 auto;
+}
+/*el-card的配置*/
+.box-card{
+    margin: 10px 0;
+}
