@@ -26,13 +26,13 @@
     },
     methods: {
       loadIndex(nav) {
-        this.$store.dispatch('loadIndex', { request_pattern: { nav }}).then(() => {
+        this.$store.dispatch('loadIndex', nav).then(() => {
           const navArr = []
           const { nav, courses } = this.indexCourseList
           for (const n of nav.children) {
             // 如果没有子导航元素了，就是底级元素，不能再点击进入了。
-            n['level'] = n.hasOwnProperty('children')
-            n['indexCourses'] = courses[n['nav_id']]
+            n['level'] = n.hasOwnProperty('subNav')
+            n['indexCourses'] = courses[n['navId']]
             navArr.push(n)
           }
           this.index = navArr

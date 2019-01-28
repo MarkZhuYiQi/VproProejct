@@ -1,8 +1,7 @@
 import request from './../utils/request'
-export function indexNav(params) {
+export function indexNav(nav) {
   return request({
-    'url': '/vpro/indexnav',
-    'method': 'get',
-    params
+    'url': '/index/' + nav,
+    'method': 'get'
   })
 }

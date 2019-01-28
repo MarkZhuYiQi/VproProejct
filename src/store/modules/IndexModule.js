@@ -29,19 +29,17 @@ export default{
      * @param param     传递参数键
      * @returns {Promise.<TResult>}
      */
-    loadIndex(context, { requestPattern = {}}) {
+    loadIndex(context, nav) {
+      if (nav === undefined || nav === null || nav === '') nav = 0
       // 每次切换页面时清空页面数据，否则会有缓存之前的图片
-      if (requestPattern.length === 0 || Object.keys(requestPattern).length === 0) {
-        context.commit('SET_INDEXCOURSELIST', '')
-        return Promise
-      }
-      requestPattern.token = context.rootState.user.userObj.auth_token
+      context.commit('SET_INDEXCOURSELIST', '')
+      // requestPattern.token = context.rootState.user.userObj.auth_token
       if (context.state.indexCourseList.length === 0 || Object.keys(context.state.indexCourseList).length === 0) {
         const loading = Loading.service({
           text: '正在加载中'
         })
         return new Promise((resolve, reject) => {
-          indexNav(requestPattern).then((res) => {
+          indexNav(nav).then((res) => {
             loading.close()
             context.commit('SET_INDEXCOURSELIST', res.data)
             resolve(res)
