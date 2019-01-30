@@ -1,4 +1,6 @@
 const getters = {
+  // static
+  cloudRoot: state => state.constant.cloudRoot,
   // userModule
   getStep: state => state.user.step,
   auth_appid: state => state.user.userObj.auth_appid,
@@ -20,6 +22,8 @@ const getters = {
   // indexModule
   carouselBackgroundColor: state => state.index.carouselBackgroundColor,
   indexCourseList: state => state.index.indexCourseList,
+  indexNavbar: state => state.index.indexNavbar,
+  indexCourses: state => state.index.indexCourses,
   // orderModule
   ordersHistory: state => state.order.orderHistory,
   ordersCurrentPage: state => state.order.currentPage,

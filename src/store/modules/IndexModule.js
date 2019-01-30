@@ -1,9 +1,12 @@
 import { indexNav } from './../../api/index'
 import { Loading, Notification } from 'element-ui'
+import { isEmpty } from '@/utils/validate'
 export default{
   state: {
     carouselBackgroundColor: 'rgb(0, 0, 0)',
-    indexCourseList: {}
+    indexNavbar: {},
+    indexCourses: {},
+    indexCourseList: ''
   },
   mutations: {
     SET_CAROUSELBACKGROUNDCOLOR(state, data) {
@@ -11,6 +14,12 @@ export default{
     },
     SET_INDEXCOURSELIST(state, data) {
       state.indexCourseList = data
+    },
+    SET_NAVBAR(state, data) {
+      state.navbar = data
+    },
+    SET_COURSES(state, data) {
+      state.courses = data
     }
   },
   actions: {
@@ -52,6 +61,13 @@ export default{
             reject(err)
           })
         })
+      }
+    },
+    loadCourses({ state, commit }, nav) {
+      if (isEmpty(nav)) nav = 0
+      commit('SET_COURSES', '')
+      if (state.indexCourses.length === 0 || Object.keys(state.indexCourses).length === 0) {
+
       }
     }
   }

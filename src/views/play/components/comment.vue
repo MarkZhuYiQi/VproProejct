@@ -8,7 +8,7 @@
                     <el-row :gutter="20" class="comment" v-for="(item, i) in comments" :key="i" v-if="comments.length">
                         <el-col :span="4">
                             <div class="comment-avatar">
-                                <img src="http://ozg76yopg.bkt.clouddn.com/face.jpg?imageView2/1/w/50/h/50/format/jpg/interlace/1/q/75|imageslim" alt="">
+                                <img :src="cloudRoot + '/face.jpg'" alt="">
                             </div>
                         </el-col>
                         <el-col :span="20">
@@ -25,7 +25,7 @@
                                 <el-row :gutter="20" :class="{ comment: true, replyLine: (item.parent.length !== 1) && ((item.parent.length - 1) !== k) }" v-for="(v, k) in item.parent" :key="k" v-show="k === item.parent.length - 1 || active_comments.indexOf(item.vpro_comment_id) >= 0">
                                     <el-col :span="4">
                                         <div class="comment-avatar">
-                                            <img src="http://ozg76yopg.bkt.clouddn.com/face.jpg?imageView2/1/w/50/h/50/format/jpg/interlace/1/q/75|imageslim" alt="">
+                                            <img :src="cloudRoot + '/face.jpg'" alt="">
                                         </div>
                                     </el-col>
                                     <el-col :span="20">
@@ -221,7 +221,11 @@
 <script>
   import commentsPagination from './comments-pagination.vue'
   import { parseTime } from '@/utils/index'
+  import { mapGetters } from 'vuex'
   export default{
+    computed: {
+      ...mapGetters(['cloudRoot'])
+    },
     mounted() {
       if (Object.keys(this.$route.query).length > 0) {
         [this.course_id, this.lesson_id] = [this.$route.query.course_id, this.$route.query.lesson_id]

@@ -37,7 +37,7 @@ K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
 </template>
 <style>
 .login-container{
-    background: #EEEEEE url("http://ozg76yopg.bkt.clouddn.com/vue.jpg") no-repeat fixed top;
+    background: #EEEEEE url("https://vpro-1258194404.cos.ap-shanghai.myqcloud.com/vue.jpg") no-repeat fixed top;
     text-align: center
 }
 .login-container input:-webkit-autofill {

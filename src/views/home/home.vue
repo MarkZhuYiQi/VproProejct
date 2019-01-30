@@ -5,7 +5,7 @@
                 <el-row :gutter="0">
                     <el-col :span="3">
                         <div style="width: 150px; height: 343px">
-                            <Multimenu v-if="Object.keys(this.indexCourseList).length > 0 && $route.name==='home'" :indexCourseList = indexCourseList></Multimenu>
+                            <Multimenu v-if="Object.keys(this.indexCourses).length > 0 && $route.name==='home'" :indexCourseList = indexCourseList></Multimenu>
                         </div>
                     </el-col>
                     <el-col :span="18">
@@ -19,7 +19,7 @@
                 </el-row>
             </div>
         </div>
-        <Cards></Cards>
+        <Cards v-show="Object.keys(indexCourses.length) > 0" />
     </div>
 </template>
 <style>
@@ -45,6 +45,7 @@
   import Carousel from './components/carousel.vue'
   import Cards from './components/cards.vue'
   import Multimenu from './components/multimenu.vue'
+
   export default{
     data() {
       return {}
@@ -55,7 +56,7 @@
       Multimenu
     },
     computed: {
-      ...mapGetters(['carouselBackgroundColor', 'indexCourseList'])
+      ...mapGetters(['carouselBackgroundColor', 'indexCourseList', 'indexNavbar', 'indexCourses'])
     }
   }
 </script>

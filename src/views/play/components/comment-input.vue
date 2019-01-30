@@ -3,7 +3,7 @@
                 <el-row>
                     <el-col :span="4">
                         <div class="comment-avatar">
-                            <img src="http://ozg76yopg.bkt.clouddn.com/face.jpg?imageView2/1/w/50/h/50/format/jpg/interlace/1/q/75|imageslim" alt="">
+                            <img :src="cloudRoot+'/face.jpg'" alt="">
                             <div class="avatar-name">
                                 <span>{{userName}}</span>
                             </div>
@@ -95,7 +95,7 @@
       }
     },
     computed: {
-      ...mapGetters(['auth_appid'])
+      ...mapGetters(['auth_appid', 'cloudRoot'])
     }
   }
 </script>

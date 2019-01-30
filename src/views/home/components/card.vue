@@ -2,22 +2,22 @@
     <div class="card-container">
         <el-row :gutter="20">
             <el-col :span="4">
-                <img src="http://ozg76yopg.bkt.clouddn.com/all.png?r=1" alt="" class="vertImg" />
+                <img :src="cloudRoot + '/all.png?r=1'" alt="" class="vertImg" />
             </el-col>
             <el-col :span="16">
                 <el-row :gutter="20" v-for="n in summary.length/3" :key="n">
                     <el-col :span="8" v-for="(item,i) in summary" :key="i" v-if="i>=(n-1)*3 && i<(n*3)">
                         <el-card :body-style="{ padding: '0px' }">
                             <div class="image">
-                                <img @click="jumpTo(item.course_id)" :src="item.course_cover_address+'?imageView2/1/w/251/h/140/format/jpg/interlace/1/q/100'"  />
+                                <img @click="jumpTo(item.courseId)" :src="cloudRoot + '/' + item.vproCoursesCover.courseCoverKey +'?imageView2/1/w/251/h/140/format/jpg/interlace/1/q/100'"  />
                             </div>
                             <div class="des">
-                                <span class="projectTitle"><a @click="jumpTo(item.course_id)">{{item.course_title}}</a></span>
+                                <span class="projectTitle"><a @click="jumpTo(item.courseId)">{{item.courseTitle}}</a></span>
                                 <div class="bottom clearfix">
-                                    <time class="time">{{item.course_time}}</time>
+                                    <time class="time">{{item.courseTime}}</time>
                                     <div class="price">
                                         <span class="original-price">￥1599</span>
-                                        <span class="discount-price">{{item.course_price}}</span>
+                                        <span class="discount-price">{{item.coursePrice}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -26,7 +26,7 @@
                 </el-row>
             </el-col>
             <el-col :span="4">
-                <img src="http://ozg76yopg.bkt.clouddn.com/all.png?r=1" alt="" class="vertImg" />
+                <img :src="cloudRoot + '/all.png?r=1'" alt="" class="vertImg" />
             </el-col>
         </el-row>
     </div>
@@ -138,12 +138,13 @@
     }
 </style>
 <script>
+  import { mapGetters } from 'vuex'
   import { dateFormat } from '@/utils/index'
   export default{
     created() {
       this.summary = this.summary.map((item, i) => {
-        item.course_time = dateFormat(item.course_time, 'yyyy-MM-dd')
-        if (parseFloat(item.course_price).toFixed(2) === '0.00') item.course_price = '免费'
+        item.courseTime = dateFormat(item.courseTime, 'yyyy-MM-dd')
+        if (parseFloat(item.coursePrice).toFixed(2) === '0.00') item.course_price = '免费'
         return item
       })
     },
@@ -152,6 +153,9 @@
         type: Array,
         default: []
       }
+    },
+    computed: {
+      ...mapGetters(['cloudRoot'])
     },
     data() {
       return {

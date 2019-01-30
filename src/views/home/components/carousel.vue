@@ -30,11 +30,11 @@
     name: 'carousel',
     created() {
       this.imgs = [
-        'http://ozg76yopg.bkt.clouddn.com/1.jpg?imageView2/1/w/980/h/343/format/jpg/q/100',
-        'http://ozg76yopg.bkt.clouddn.com/2.jpg?imageView2/1/w/980/h/343/format/jpg/q/100',
-        'http://ozg76yopg.bkt.clouddn.com/3.jpg?imageView2/2/w/980/h/343/format/jpg/q/100',
-        'http://ozg76yopg.bkt.clouddn.com/4.jpg?imageView2/2/w/980/h/343/format/jpg/q/100',
-        'http://ozg76yopg.bkt.clouddn.com/5.jpg?imageView2/2/w/980/h/343/format/jpg/q/100'
+        this.cloudRoot + '/1.jpg?imageView2/1/w/980/h/343/format/jpg/q/100',
+        this.cloudRoot + '/2.jpg?imageView2/1/w/980/h/343/format/jpg/q/100',
+        this.cloudRoot + '/3.jpg?imageView2/2/w/980/h/343/format/jpg/q/100',
+        this.cloudRoot + '/4.jpg?imageView2/2/w/980/h/343/format/jpg/q/100',
+        this.cloudRoot + '/5.jpg?imageView2/2/w/980/h/343/format/jpg/q/100'
       ]
     },
     mounted() {
@@ -88,7 +88,7 @@
       swiper() {
         return this.$refs.mySwiper.swiper
       },
-      ...mapGetters(['indexCourseList'])
+      ...mapGetters(['indexCourseList', 'cloudRoot'])
     }
   }
 </script>

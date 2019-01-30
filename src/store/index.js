@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import constant from './modules/ConstantModule'
 import video from './modules/VideoModule'
 import user from './modules/UserModule'
 import comment from './modules/CommentModule'
@@ -17,6 +18,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
+    constant,
     video,
     user,
     comment,

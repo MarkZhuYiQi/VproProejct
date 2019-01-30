@@ -31,3 +31,8 @@ export function validatAlphabets(str) {
   return reg.test(str)
 }
 
+/* 字符串是否为空 */
+export function isEmpty(str) {
+  if (str === '' || str === null || str === undefined) return true
+  return false
+}

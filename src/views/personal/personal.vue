@@ -3,7 +3,7 @@
         <div class="panel">
             <div class="panel-container">
                 <div class="panel-img">
-                    <img src="http://ozg76yopg.bkt.clouddn.com/face.jpg" alt="" />
+                    <img :src="cloudRoot + '/face.jpg'" alt="" />
                 </div>
                 <div class="panel-title">
                     <span class="panel-title-name">{{this.auth_appid}}</span>
@@ -160,6 +160,6 @@
       }
     },
     computed: {
-      ...mapGetters(['auth_appid', 'auth_id'])
+      ...mapGetters(['auth_appid', 'auth_id', 'cloudRoot'])
     }}
 </script>

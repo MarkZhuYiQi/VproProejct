@@ -20,12 +20,13 @@
         </el-col>
         <el-col :md='6' :xs='24' :sm='6' :lg='6' :xl='6'>
             <div class='vjs-playlist' :style='{ width: scrollSize.width + "px", height: scrollSize.height + "px", backgroundColor: "#333", display: "inline-block" }'></div>
-            <el-button @click="player.src({ src: 'http://ozg76yopg.bkt.clouddn.com/error', type: 'video/mp4' } )">123</el-button>
+            <el-button @click="player.src({ src: this.cloudRoot + '/error', type: 'video/mp4' } )">123</el-button>
         </el-col>
     </el-row>
 </template>
 <style></style>
 <script>
+  import { mapGetters } from 'vuex'
   import 'video.js/dist/video-js.css'
   import 'videojs-playlist-ui/dist/videojs-playlist-ui.vertical.css'
   import { videoPlayer } from 'vue-video-player'
@@ -42,7 +43,7 @@
                 description: '',
                 duration: '',
                 sources: [
-                  { src: 'http://ozg76yopg.bkt.clouddn.com/error', type: 'video/mp4' }
+                  { src: this.cloudRoot + '/error', type: 'video/mp4' }
                 ],
                 thumbnail: false
               })
@@ -151,7 +152,7 @@
 
       // player is ready
       playerReadied(player) {
-        player.src({ src: 'http://ozg76yopg.bkt.clouddn.com/error', type: 'video/mp4' })
+        player.src({ src: this.cloudRoot + '/error', type: 'video/mp4' })
         // console.log('the player is readied', player)
         // you can use it to do something...
         // player.[methods]
@@ -161,7 +162,8 @@
     computed: {
       player() {
         if (this.$refs.videoPlayer.player !== undefined) return this.$refs.videoPlayer.player
-      }
+      },
+      ...mapGetters(['cloudRoot'])
     }
   }
 </script>

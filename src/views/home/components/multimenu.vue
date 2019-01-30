@@ -12,7 +12,7 @@
                         <div  v-for="(value, key) in navDetail" >
                             <span><a :href="'/#/index/' + value.navUrl" class="main" target="_blank">{{value.navText}}</a></span>
                             <ul class="detail-list" :key="key">
-                                <li v-for="(item, i) in value.children" class="divide" :key="i">
+                                <li v-for="(item, i) in value.subNav" class="divide" :key="i">
                                     <a :href="'/#/category/' + item.navUrl" class="list-item" target="_blank">{{item.navText}}</a>
                                 </li>
                             </ul>
@@ -102,13 +102,13 @@
   // import { mapGetters } from 'vuex'
   export default {
     props: {
-      indexCourseList: {
+      indexNavbar: {
         type: Object,
         default: {}
       }
     },
     mounted() {
-      this.navData = this.iterNav(this.indexCourseList.nav.children)
+      this.navData = this.iterNav(this.indexNavbar.subNav)
     },
     data() {
       return {
@@ -128,12 +128,12 @@
           for (const item of data) {
             let temp = {}
             temp = {
-              navUrl: item.nav_url.split('/')[2],
-              navText: item.nav_text
+              navUrl: item.navUrl.split('/')[2],
+              navText: item.navText
             }
-            if (item.hasOwnProperty('children')) {
-              temp['children'] = []
-              temp['children'] = this.iterNav(item.children)
+            if (item.hasOwnProperty('subNav')) {
+              temp['subNav'] = []
+              temp['subNav'] = this.iterNav(item.subNav)
             }
             navData.push(temp)
           }
@@ -148,7 +148,7 @@
       showMultiMenu(item) {
         this.subMenuShowed = true
         if (!item.hasOwnProperty('navText')) return
-        this.navDetail = item.children
+        this.navDetail = item.subNav
       },
       hideMultiMenu() {
         this.subMenuShowed = false

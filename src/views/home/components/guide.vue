@@ -3,15 +3,15 @@
         <el-col :span="24">
             <div class="guideArea">
                 <!--<span v-if="level" class="guideTitle linkTitle" @click="jumpTo('/#/index/'+nav_nickname)">{{title}}</span>-->
-                <span v-if="level" class="guideTitle linkTitle" @click="jumpTo('/index/'+nav_nickname)">{{title}}</span>
+                <span v-if="level" class="guideTitle linkTitle" @click="jumpTo('/index/'+navNickname)">{{title}}</span>
                 <span class="guideTitle linkTitle" v-if="!level">{{title}}</span>
                 <span v-for="(item, i) in child" v-if="child.length" :key="i">
                     <!--<span v-if="item.level" class="sub_title linkTitle" @click="jumpTo('/#/index/'+item.nav_nickname)">{{item.nav_text}}</span>-->
-                    <span v-if="item.level" class="sub_title linkTitle" @click="jumpTo('/index/'+item.nav_nickname)">{{item.nav_text}}</span>
-                    <span class="sub_title linkTitle" v-if="!item.level" @click="jumpTo('/category/' + item.nav_nickname)">{{item.nav_text}}</span>
+                    <span v-if="item.level" class="sub_title linkTitle" @click="jumpTo('/index/'+item.navNickname)">{{item.navText}}</span>
+                    <span class="sub_title linkTitle" v-if="!item.level" @click="jumpTo('/category/' + item.navNickname)">{{item.navText}}</span>
                 </span>
                 <!--<span class="more linkTitle" @click="open('/#' + nav_url)">更多 <i class="el-icon-arrow-right" style="font-size:10px;line-height:14px;"></i></span>-->
-                <span class="more linkTitle" @click="jumpTo(nav_url)">更多 <i class="el-icon-arrow-right" style="font-size:10px;line-height:14px;"></i></span>
+                <span class="more linkTitle" @click="jumpTo(navUrl)">更多 <i class="el-icon-arrow-right" style="font-size:10px;line-height:14px;"></i></span>
             </div>
         </el-col>
     </el-row>
@@ -54,7 +54,7 @@
           return ''
         }
       },
-      nav_nickname: {
+      navNickname: {
         type: String,
         default: () => {
           return ''
@@ -66,7 +66,7 @@
           return []
         }
       },
-      nav_url: {
+      navUrl: {
         type: String,
         default: () => {
           return ''
@@ -81,7 +81,7 @@
     },
     created() {
       this.child = this.child.map(res => {
-        res['level'] = res.hasOwnProperty('children')
+        res['level'] = res.hasOwnProperty('subNav')
         return res
       })
     },

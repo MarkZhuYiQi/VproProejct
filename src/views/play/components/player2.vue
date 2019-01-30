@@ -58,6 +58,7 @@
     }
 </style>
 <script>
+  import { mapGetters } from 'vuex'
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import ScrollBar from 'vue2-scrollbar'
@@ -77,7 +78,7 @@
                 duration: '',
                 // sources: [{ src: 'http://ozg76yopg.bkt.clouddn.com/error', type: 'video/mp4' }],
                 sources: {
-                  src: item.video_file_key && item.video_file_isused ? 'http://ozg76yopg.bkt.clouddn.com/' + item.video_file_key : 'http://ozg76yopg.bkt.clouddn.com/error?v=' + Math.floor((Math.random() * 100) + 1),
+                  src: item.video_file_key && item.video_file_isused ? this.cloudRoot + '/' + item.video_file_key : this.cloudRoot + '/error?v=' + Math.floor((Math.random() * 100) + 1),
                   type: 'video/mp4'
                 },
                 thumbnail: false
@@ -227,7 +228,8 @@
       },
       scrollbar() {
         if (this.$refs.myscrollbar !== undefined) return this.$refs.myscrollbar
-      }
+      },
+      ...mapGetters(['cloudRoot'])
     }
   }
 </script>

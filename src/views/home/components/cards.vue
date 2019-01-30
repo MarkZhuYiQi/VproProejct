@@ -1,7 +1,11 @@
 <template>
     <div class="card-container" v-if="flag">
         <div v-for="(item, i) in index" :key="i" >
-            <Guide :title="item.nav_text" :child="item.children" :nav_nickname="item.nav_nickname" :nav_url=" item.nav_url" :level="item.level"></Guide>
+            <img
+              src="/static/loading-bubbles.svg"
+              alt=""
+              style="background-color: #3a8ee6; width: 200px; height: 200px; margin: 20px auto;">
+            <Guide :title="item.navText" :child="item.subNav" :navNickname="item.navNickname" :navUrl=" item.navUrl" :level="item.level"></Guide>
             <Card :content="item.indexCourses"></Card>
         </div>
     </div>
@@ -29,7 +33,7 @@
         this.$store.dispatch('loadIndex', nav).then(() => {
           const navArr = []
           const { nav, courses } = this.indexCourseList
-          for (const n of nav.children) {
+          for (const n of nav.subNav) {
             // 如果没有子导航元素了，就是底级元素，不能再点击进入了。
             n['level'] = n.hasOwnProperty('subNav')
             n['indexCourses'] = courses[n['navId']]

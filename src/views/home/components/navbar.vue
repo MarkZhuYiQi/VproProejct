@@ -19,7 +19,7 @@
                         <el-menu-item index="" v-if="isLogin">
                         <el-dropdown placement="bottom" @command="dropDownCommand">
                             <span class="el-dropdown-link">
-                            <img id="head" @click="show" src='http://ozg76yopg.bkt.clouddn.com/face.jpg' alt="">
+                            <img id="head" @click="show" :src="cloudRoot + '/face.jpg'" alt="">
                                 <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
                             </span>
                                 <el-dropdown-menu slot="dropdown" size="medium" click="">
@@ -314,7 +314,7 @@ K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
       }
     },
     computed: {
-      ...mapGetters(['auth_token', 'loginRequired'])
+      ...mapGetters(['auth_token', 'loginRequired', 'cloudRoot'])
     }
   }
 </script>
