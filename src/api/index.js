@@ -1,13 +1,19 @@
 import request from './../utils/request'
 export function indexNav(nav) {
   return request({
-    'url': '/index/nav' + nav,
+    'url': '/index/nav/' + nav,
     'method': 'get'
   })
 }
 export function indexCourses(nav) {
   return request({
-    'url': '/index/courses' + nav,
+    'url': '/index/courses/' + nav,
     'method': 'get'
+  })
+}
+export function indexNavbar(nav) {
+  return request({
+    url: '/index/nav/' + nav,
+    method: 'get'
   })
 }

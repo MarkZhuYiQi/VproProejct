@@ -1,4 +1,4 @@
-import { indexNav } from './../../api/index'
+import { indexNav, indexCourses, indexNavbar } from './../../api/index'
 import { Loading, Notification } from 'element-ui'
 import { isEmpty } from '@/utils/validate'
 export default{
@@ -67,7 +67,36 @@ export default{
       if (isEmpty(nav)) nav = 0
       commit('SET_COURSES', '')
       if (state.indexCourses.length === 0 || Object.keys(state.indexCourses).length === 0) {
-
+        return new Promise((resolve, reject) => {
+          indexCourses(nav).then(res => {
+            commit('SET_COURSES', res.data)
+            resolve(res.data)
+          }).catch(err => {
+            Notification.error({
+              title: '错误',
+              message: '课程未成功加载！'
+            })
+            reject(err)
+          })
+        })
+      }
+    },
+    loadNav({ state, commit }, nav) {
+      if (isEmpty(nav)) nav = 0
+      commit('SET_NAVBAR', '')
+      if (state.indexNavbar.length === 0 || Object.keys(state.indexNavbar).length === 0) {
+        return new Promise((resolve, reject) => {
+          indexNavbar(nav).then(res => {
+            commit('SET_NAVBAR', res.data)
+            resolve(res.data)
+          }).catch(err => {
+            Notification.error({
+              title: '错误',
+              message: '导航未成功加载！'
+            })
+            reject(err)
+          })
+        })
       }
     }
   }
