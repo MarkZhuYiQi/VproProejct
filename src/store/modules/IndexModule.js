@@ -16,10 +16,10 @@ export default{
       state.indexCourseList = data
     },
     SET_NAVBAR(state, data) {
-      state.navbar = data
+      state.indexNavbar = data
     },
     SET_COURSES(state, data) {
-      state.courses = data
+      state.indexCourses = data
     }
   },
   actions: {
@@ -65,7 +65,7 @@ export default{
     },
     loadCourses({ state, commit }, nav) {
       if (isEmpty(nav)) nav = 0
-      commit('SET_COURSES', '')
+      commit('SET_COURSES', {})
       if (state.indexCourses.length === 0 || Object.keys(state.indexCourses).length === 0) {
         return new Promise((resolve, reject) => {
           indexCourses(nav).then(res => {
@@ -81,9 +81,9 @@ export default{
         })
       }
     },
-    loadNav({ state, commit }, nav) {
+    loadNavbar({ state, commit }, nav) {
       if (isEmpty(nav)) nav = 0
-      commit('SET_NAVBAR', '')
+      commit('SET_NAVBAR', {})
       if (state.indexNavbar.length === 0 || Object.keys(state.indexNavbar).length === 0) {
         return new Promise((resolve, reject) => {
           indexNavbar(nav).then(res => {

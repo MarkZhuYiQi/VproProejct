@@ -5,7 +5,7 @@
                 <el-row :gutter="0">
                     <el-col :span="3">
                         <div style="width: 150px; height: 343px">
-                            <Multimenu v-if="Object.keys(this.indexNavbar).length > 0 && $route.name==='home'" :indexNavbar = indexNavbar></Multimenu>
+                            <Multimenu v-if="Object.keys(this.indexNavbar).length > 0 && $route.name==='home'" :indexNavbar=indexNavbar ></Multimenu>
                         </div>
                     </el-col>
                     <el-col :span="18">
@@ -19,7 +19,7 @@
                 </el-row>
             </div>
         </div>
-        <Cards v-show="Object.keys(indexCourses.length) > 0" />
+        <Cards />
     </div>
 </template>
 <style>

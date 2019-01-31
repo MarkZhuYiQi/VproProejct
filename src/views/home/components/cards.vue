@@ -1,14 +1,24 @@
 <template>
-    <div class="card-container" v-if="flag">
-        <div v-for="(item, i) in index" :key="i" >
-            <img
-              src="/static/loading-bubbles.svg"
-              alt=""
-              style="background-color: #3a8ee6; width: 200px; height: 200px; margin: 20px auto;">
-            <Guide :title="item.navText" :child="item.subNav" :navNickname="item.navNickname" :navUrl=" item.navUrl" :level="item.level"></Guide>
-            <Card :content="item.indexCourses"></Card>
-        </div>
+  <div>
+    <div style="text-align: center" v-if="!flag && Object.keys(this.indexCourses).length === 0 && Object.keys(this.indexNavbar).length === 0">
+      <img
+        src="/static/loading-bubbles.svg"
+        alt=""
+        style="width: 50px; height: 50px; margin: 20px auto;">
     </div>
+    <div class="card-container">
+      <div v-for="(item, i) in index" :key="i">
+        <Guide :title="item.navText" :child="item.subNav" :navNickname="item.navNickname" :navUrl=" item.navUrl" :level="item.level"></Guide>
+        <div style="text-align: center" v-if="Object.keys(item.indexCourses).length === 0 && !flag">
+          <img
+            src="/static/loading-bubbles.svg"
+            alt=""
+            style="width: 50px; height: 50px; margin: 20px auto;">
+        </div>
+        <Card :content="item.indexCourses" v-if="flag"></Card>
+      </div>
+    </div>
+  </div>
 </template>
 <style>
 </style>
@@ -18,7 +28,9 @@
   import { mapGetters } from 'vuex'
   export default{
     mounted() {
-      this.loadIndex(this.$route.params['nav'])
+      // this.loadNavbar(this.$route.params['nav'])
+      // this.loadCourses(this.$route.params['nav'])
+      this.loadIndex()
     },
     data() {
       return {
@@ -29,20 +41,66 @@
       }
     },
     methods: {
-      loadIndex(nav) {
-        this.$store.dispatch('loadIndex', nav).then(() => {
-          const navArr = []
-          const { nav, courses } = this.indexCourseList
-          for (const n of nav.subNav) {
-            // 如果没有子导航元素了，就是底级元素，不能再点击进入了。
-            n['level'] = n.hasOwnProperty('subNav')
-            n['indexCourses'] = courses[n['navId']]
-            navArr.push(n)
+      loadNavbar(nav) {
+        return new Promise((resolve, reject) => {
+          this.$store.dispatch('loadNavbar', nav).then(nav => {
+            if (!this.flag) {
+              const navArr = []
+              for (const n of nav.subNav) {
+                n['level'] = n.hasOwnProperty('subNav')
+                n['indexCourses'] = []
+                navArr.push(n)
+              }
+              if (Object.keys(this.index).length === 0) this.index = navArr
+            }
+            resolve(nav)
+          }).catch(err => {
+            reject(err)
+          })
+        })
+      },
+      loadCourses(nav) {
+        return new Promise((resolve, reject) => {
+          this.$store.dispatch('loadCourses', nav).then(courses => {
+            resolve(courses)
+          }).catch(err => {
+            reject(err)
+          })
+        })
+      },
+      loadIndex() {
+        const nav = this.$route.params['nav']
+        const navP = this.loadNavbar(nav)
+        const coursesP = this.loadCourses(nav)
+        Promise.all([navP, coursesP]).then(res => {
+          const [navbar, courses] = res
+          if (Object.keys(navbar).length > 0 && Object.keys(courses).length > 0) {
+            const navArr = []
+            for (const n of navbar.subNav) {
+              n['level'] = n.hasOwnProperty('subNav')
+              n['indexCourses'] = courses.hasOwnProperty(n['navId']) ? courses[n['navId']] : []
+              navArr.push(n)
+            }
+            this.index = navArr
+            this.flag = true
+            console.log(this.index)
           }
-          this.index = navArr
-          this.flag = true
         })
       }
+      // loadIndex(nav) {
+      //   this.$store.dispatch('loadIndex', nav).then(() => {
+      //     const navArr = []
+      //     const { nav, courses } = this.indexCourseList
+      //     for (const n of nav.subNav) {
+      //       // 如果没有子导航元素了，就是底级元素，不能再点击进入了。
+      //       n['level'] = n.hasOwnProperty('subNav')
+      //       n['indexCourses'] = courses[n['navId']]
+      //       navArr.push(n)
+      //     }
+      //     this.index = navArr
+      //     this.flag = true
+      //   })
+      // }
     },
     watch: {
       $route: {
@@ -58,7 +116,7 @@
       Card
     },
     computed: {
-      ...mapGetters(['indexCourseList'])
+      ...mapGetters(['indexCourseList', 'indexCourses', 'indexNavbar'])
     }
   }
 </script>
