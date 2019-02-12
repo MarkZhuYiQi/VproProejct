@@ -29,7 +29,7 @@ export default{
       return new Promise((resolve, reject) => {
         console.log(context.state.categoryCrumb)
         if (context.state.categoryCrumb.length === 0) return
-        loadCategory({ category: context.state.categoryCrumb[context.state.categoryCrumb.length - 1]['nav_url'].split('/')[2], p: page }).then((res) => {
+        loadCategory({ c: context.state.categoryCrumb[context.state.categoryCrumb.length - 1]['navId'], p: page }).then((res) => {
           loading.close()
           context.commit('SET_COURSESLIST', res.data)
           resolve(res.data)

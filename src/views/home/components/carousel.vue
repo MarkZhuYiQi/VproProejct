@@ -50,14 +50,14 @@
         swiperOption: {
           notNextTick: true,
           // 自动播放
-          autoplay: 3000,
+          autoplay: 99993000,
           // 横向滚动
           direction: 'horizontal',
           // 滚动速度
           speed: 300,
           // 指针会变成手掌
           grabCursor: true,
-          // 人工操作后动画不停止
+          // 人工操作后动画不停止/
           autoplayDisableOnInteraction: false,
           // 可以用滚轮控制
           // 为前进后退按钮设置功能

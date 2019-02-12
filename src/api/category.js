@@ -16,7 +16,7 @@ export function getPage(params) {
 }
 export function getNavTree() {
   return request({
-    'url': '/nav/get-nav-tree',
+    'url': '/category/get-nav-tree',
     'method': 'get'
   })
 }

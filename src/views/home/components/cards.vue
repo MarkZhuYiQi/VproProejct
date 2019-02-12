@@ -8,7 +8,7 @@
     </div>
     <div class="card-container">
       <div v-for="(item, i) in index" :key="i">
-        <Guide :title="item.navText" :child="item.subNav" :navNickname="item.navNickname" :navUrl=" item.navUrl" :level="item.level"></Guide>
+        <Guide :title="item.navText" :child="item.subNav" :navNickname="item.navNickname" :navId="item.navId" :navUrl=" item.navUrl" :level="item.level"></Guide>
         <div style="text-align: center" v-if="Object.keys(item.indexCourses).length === 0 && !flag">
           <img
             src="/static/loading-bubbles.svg"

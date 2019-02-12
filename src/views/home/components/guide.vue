@@ -3,15 +3,16 @@
         <el-col :span="24">
             <div class="guideArea">
                 <!--<span v-if="level" class="guideTitle linkTitle" @click="jumpTo('/#/index/'+nav_nickname)">{{title}}</span>-->
-                <span v-if="level" class="guideTitle linkTitle" @click="jumpTo('/index/'+navNickname)">{{title}}</span>
+                <!--<span v-if="level" class="guideTitle linkTitle" @click="jumpTo('/index/'+navNickname)">{{title}}</span>-->
+                <span v-if="level" class="guideTitle linkTitle" @click="jumpTo('/index/'+navId)">{{title}}</span>
                 <span class="guideTitle linkTitle" v-if="!level">{{title}}</span>
                 <span v-for="(item, i) in navChild" v-if="navChild.length" :key="i">
                     <!--<span v-if="item.level" class="sub_title linkTitle" @click="jumpTo('/#/index/'+item.nav_nickname)">{{item.nav_text}}</span>-->
-                    <span v-if="item.level" class="sub_title linkTitle" @click="jumpTo('/index/'+item.navNickname)">{{item.navText}}</span>
-                    <span class="sub_title linkTitle" v-if="!item.level" @click="jumpTo('/category/' + item.navNickname)">{{item.navText}}</span>
+                    <span v-if="item.level" class="sub_title linkTitle" @click="jumpTo('/index/'+item.navId)">{{item.navText}}</span>
+                    <span class="sub_title linkTitle" v-if="!item.level" @click="jumpTo('/category/' + item.navId)">{{item.navText}}</span>
                 </span>
                 <!--<span class="more linkTitle" @click="open('/#' + nav_url)">更多 <i class="el-icon-arrow-right" style="font-size:10px;line-height:14px;"></i></span>-->
-                <span class="more linkTitle" @click="jumpTo(navUrl)">更多 <i class="el-icon-arrow-right" style="font-size:10px;line-height:14px;"></i></span>
+                <span class="more linkTitle" @click="jumpTo('/category/' + navId)">更多 <i class="el-icon-arrow-right" style="font-size:10px;line-height:14px;"></i></span>
             </div>
         </el-col>
     </el-row>
@@ -52,6 +53,12 @@
         type: String,
         default: () => {
           return ''
+        }
+      },
+      navId: {
+        type: Number,
+        default: () => {
+          return 0
         }
       },
       navNickname: {

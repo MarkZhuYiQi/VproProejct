@@ -1,13 +1,13 @@
 <template>
     <div v-if="navTree.length > 0" class="filter">
         <ul>
-            <li v-for="(item, i) in navTree" :key="i" @mouseenter="subNavChange(item, i, 0)" :class="{ 'selectNav': key0===i }" @click="handleClick(0, item)">{{item.nav_text}}</li>
+            <li v-for="(item, i) in navTree" :key="i" @mouseenter="subNavChange(item, i, 0)" :class="{ 'selectNav': key0===i }" @click="handleClick(0, item)">{{item.navText}}</li>
         </ul>
         <ul>
-            <li v-for="(item, i) in subNav1" :key="i" @mouseenter="subNavChange(item, i, 1)" :class="{ 'selectNav': key1===i }" @click="handleClick(1, item)">{{item.nav_text}}</li>
+            <li v-for="(item, i) in subNav1" :key="i" @mouseenter="subNavChange(item, i, 1)" :class="{ 'selectNav': key1===i }" @click="handleClick(1, item)">{{item.navText}}</li>
         </ul>
         <ul>
-            <li v-for="(item, i) in subNav2" :key="i" @mouseenter="subNavChange(item, i, 2)" :class="{ 'selectNav': key2===i }" @click="handleClick(2, item)">{{item.nav_text}}</li>
+            <li v-for="(item, i) in subNav2" :key="i" @mouseenter="subNavChange(item, i, 2)" :class="{ 'selectNav': key2===i }" @click="handleClick(2, item)">{{item.navText}}</li>
         </ul>
 
     </div>
@@ -36,7 +36,8 @@
   export default {
     mounted() {
       this.$store.dispatch('getNavTree').then(res => {
-        this.subNav = res[0]['children']
+        console.log('navTree in filter.vue: ', res)
+        this.subNav = res
         this.$store.dispatch('setCategoryCrumb', this.iterCrumb())
       })
     },
@@ -56,20 +57,22 @@
     methods: {
       iterCrumb(res = [], navTree = this.navTree, nav = this.$route.params['nav']) {
         for (const item of navTree) {
-          if (item.nav_nickname === nav) {
+          if (parseInt(item.navId) === parseInt(nav)) {
             res.unshift({
-              nav_text: item.nav_text,
-              nav_url: item.nav_url
+              navText: item.navText,
+              navUrl: item.navUrl,
+              navId: item.navId
             })
             return res
           }
-          if (item.hasOwnProperty('children')) {
-            res = this.iterCrumb(res, item.children)
+          if (item.hasOwnProperty('subNav') && item.subNav.length !== 0) {
+            res = this.iterCrumb(res, item.subNav)
           }
           if (res.length > 0) {
             res.unshift({
-              nav_text: item.nav_text,
-              nav_url: item.nav_url
+              navText: item.navText,
+              navUrl: item.navUrl,
+              navId: item.navId
             })
             return res
           }
@@ -79,9 +82,9 @@
       subNavChange(item, key, level) {
         if (level !== 2) {
           const resNav = 'subNav' + (level + 1)
-          this[resNav] = item.children
+          this[resNav] = item.subNav
         }
-        this.breadCrumb[level] = { 'nav_text': item.nav_text, 'nav_url': item.nav_url }
+        this.breadCrumb[level] = { 'navText': item.navText, 'navUrl': item.navUrl, 'navId': item.navId }
         const resKey = 'key' + level
         this[resKey] = key
         if (level === 0) {
@@ -90,7 +93,7 @@
         }
       },
       handleClick(level, item) {
-        this.$router.push({ path: item.nav_url })
+        this.$router.push({ path: '/category/' + item.navId })
         this.originBreadCrumb = this.breadCrumb.slice(0, level + 1)
         this.$store.dispatch('setCategoryCrumb', this.originBreadCrumb)
       }

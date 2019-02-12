@@ -37,6 +37,7 @@
   import breadCrumb from './components/breadCrumb.vue'
   export default{
     mounted() {
+      console.log(this.$route.params)
       this.navChange(this.$route.params['nav'])
     },
     data() {
@@ -63,7 +64,9 @@
     },
     watch: {
       categoryCrumb(to, from) {
-        this.navChange(to[to.length - 1].nav_url.split('/')[2])
+        console.log(to, from)
+        // this.navChange(to[to.length - 1].navUrl.split('/')[2])
+        this.navChange(to[to.length - 1].navId)
       }
     },
     components: {
