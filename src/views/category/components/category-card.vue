@@ -1,15 +1,15 @@
 <template>
     <el-card :body-style="{ padding: '0px' }">
         <div class="image">
-            <img @click="jumpTo(sum.course_id)" :src="sum.course_cover_address + '?imageView2/1/w/250/h/140/format/jpg/interlace/1/q/100'" />
+            <img @click="jumpTo(sum.courseId)" :src="cloudRoot + '/' + sum.vproCoursesCover.courseCoverKey + '?imageView2/1/w/250/h/140/format/jpg/interlace/1/q/100'" />
         </div>
         <div class="des">
-            <span class="projectTitle"><a @click="jumpTo(sum.course_id)">{{sum.course_title}}</a></span>
+            <span class="projectTitle"><a @click="jumpTo(sum.courseId)">{{sum.courseTitle}}</a></span>
             <div class="bottom clearfix">
                 <time class="time">{{  }}</time>
                 <div class="price">
-                    <span class="original-price" v-if="parseFloat(sum.course_discount_price).toFixed(2) !== '-1.00'">{{sum.course_discount_price}}</span>
-                    <span class="discount-price">{{sum.course_price}}</span>
+                    <span class="original-price" v-if="parseFloat(sum.courseDiscountPrice).toFixed(2) !== '-1.00'">{{sum.courseDiscountPrice}}</span>
+                    <span class="discount-price">{{sum.coursePrice}}</span>
                 </div>
             </div>
         </div>
@@ -97,6 +97,7 @@
 </style>
 <script>
   import { dateFormat } from '@/utils/index'
+  import { mapGetters } from 'vuex'
   export default {
     props: {
       info: {
@@ -104,9 +105,12 @@
         default: {}
       }
     },
+    computed: {
+      ...mapGetters(['cloudRoot'])
+    },
     created() {
-      if (parseFloat(this.sum.course_price).toFixed(2) === '0.00') this.sum.course_price = '免费'
-      this.sum.course_time = dateFormat(this.sum.course_time, 'yyyy-MM-dd')
+      if (parseFloat(this.sum.coursePrice).toFixed(2) === '0.00') this.sum.coursePrice = '免费'
+      this.sum.courseTime = dateFormat(this.sum.courseTime, 'yyyy-MM-dd')
     },
     data() {
       return {

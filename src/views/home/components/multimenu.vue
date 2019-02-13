@@ -2,7 +2,7 @@
     <div class="multimenu-main">
         <ul class="multimenu-list">
             <li @mouseenter="showMultiMenu(item)" @mouseleave="hideMultiMenu" v-for="(item, i) in navData">
-                <a :href="'/#/index/' + item.navUrl" target="_blank">{{item.navText}}</a>
+                <a :href="'/#/index/' + item.navId" target="_blank">{{item.navText}}</a>
             </li>
         </ul>
         <transition name="el-fade-in-linear">
@@ -10,10 +10,10 @@
                 <el-row :gutter="20">
                     <el-col :span="18">
                         <div  v-for="(value, key) in navDetail" >
-                            <span><a :href="'/#/index/' + value.navUrl" class="main" target="_blank">{{value.navText}}</a></span>
+                            <span><a :href="'/#/index/' + value.navId" class="main" target="_blank">{{value.navText}}</a></span>
                             <ul class="detail-list" :key="key">
                                 <li v-for="(item, i) in value.subNav" class="divide" :key="i">
-                                    <a :href="'/#/category/' + item.navUrl" class="list-item" target="_blank">{{item.navText}}</a>
+                                    <a :href="'/#/category/' + item.navId" class="list-item" target="_blank">{{item.navText}}</a>
                                 </li>
                             </ul>
                         </div>
@@ -128,7 +128,7 @@
           for (const item of data) {
             let temp = {}
             temp = {
-              navUrl: item.navUrl.split('/')[2],
+              navId: item.navId,
               navText: item.navText
             }
             if (item.hasOwnProperty('subNav')) {

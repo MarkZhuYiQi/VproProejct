@@ -1,7 +1,7 @@
 import request from './../utils/request'
 export function loadCategory(params) {
   return request({
-    'url': '/category/categories',
+    'url': '/course/catalogs',
     'method': 'get',
     params
   })

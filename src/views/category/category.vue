@@ -49,9 +49,7 @@
       navChange(nav) {
         this.$store.dispatch('clearPage')
         this.$store.dispatch('clearCategories').then(() => {
-          this.$store.dispatch('loadCategories', { nav }).then(() => {
-            this.$store.dispatch('getPage', { nav }).then((res) => { console.log(res) })
-          })
+          this.$store.dispatch('loadCategories', { nav })
         })
       },
       pageChange(page) {

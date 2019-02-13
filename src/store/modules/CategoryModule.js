@@ -31,7 +31,8 @@ export default{
         if (context.state.categoryCrumb.length === 0) return
         loadCategory({ c: context.state.categoryCrumb[context.state.categoryCrumb.length - 1]['navId'], p: page }).then((res) => {
           loading.close()
-          context.commit('SET_COURSESLIST', res.data)
+          context.commit('SET_COURSESLIST', res.data.list)
+          context.commit('SET_PAGINATION', res.data.pages)
           resolve(res.data)
         }).catch(err => {
           loading.close()
