@@ -6,3 +6,9 @@ export function getLessonDetail(params) {
     params
   })
 }
+export function getLessonsList(courseId) {
+  return request({
+    method: 'get',
+    url: '/lesson/list' + courseId
+  })
+}

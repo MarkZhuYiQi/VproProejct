@@ -81,12 +81,12 @@
                                 <div class="chapterList" v-if="list.length">
                                     <div v-for="(l, k) in list" :key="k">
                                         <div class="chapterHead" v-if="l.lesson_title">
-                                            <span class="chapterTitle">章节{{parseInt(l.lesson_lid)+1}}:</span>
-                                            <span class="chapterName">{{l.lesson_title}}</span>
+                                            <span class="chapterTitle">章节{{parseInt(l.lessonLid)+1}}:</span>
+                                            <span class="chapterName">{{l.lessonTitle}}</span>
                                         </div>
-                                        <div class="section" v-for="v in l.lesson" :key="v.lesson_id" @click="enterVideo(v)">
-                                            <span class="lesson">课时{{parseInt(v.lesson_lid)+1}}</span>
-                                            <span class="lessonName" >{{v.lesson_title}}</span>
+                                        <div class="section" v-for="v in l.lesson" :key="v.lessonId" @click="enterVideo(v)">
+                                            <span class="lesson">课时{{parseInt(v.lessonLid)+1}}</span>
+                                            <span class="lessonName" >{{v.lessonTitle}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -116,8 +116,8 @@
                     </div>
                     <div v-for="(item, i) in recInfo" :key="i" class="text item rec">
                         <img @click="jumpTo(item.course_id)" :src="item.course_cover_address + '?imageView2/2/w/243/h/135/format/jpg/q/100'" alt="">
-                        <span class="rec-title" @click="jumpTo(item.course_id)">{{item.course_title}}</span>
-                        <span class="rec-author">{{item.course_author}}</span>
+                        <span class="rec-title" @click="jumpTo(item.course_id)">{{item.courseTitle}}</span>
+                        <span class="rec-author">{{item.courseAuthor}}</span>
                     </div>
                 </el-card>
             </el-col>
@@ -293,7 +293,7 @@
         const lesson_list = this.lessonDetail.lesson_list
         headFlag = false
         for (const item of lesson_list) {
-          if (item.lesson_is_chapter_head === '1') {
+          if (item.lessonIsChapterHead === '1') {
             headFlag = true
             break
           }
@@ -302,11 +302,11 @@
         console.log(headFlag)
         if (headFlag) {
           for (const i of lesson_list) {
-            if (i.lesson_is_chapter_head === '1') {
+            if (i.lessonIsChapterHead === '1') {
               const chapter = i
               i.lesson = []
               for (const item of lesson_list) {
-                if (item.lesson_pid === i.lesson_id) {
+                if (item.lessonPid === i.lessonId) {
                   chapter.lesson.push(item)
                 }
               }
@@ -314,7 +314,7 @@
             }
           }
         } else {
-          const chapter = { lesson: lesson_list, lesson_title: false }
+          const chapter = { lesson: lesson_list, lessonTitle: false }
           list.push(chapter)
         }
         this.list = list
