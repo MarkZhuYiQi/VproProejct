@@ -1,12 +1,16 @@
-import { getLessonDetail } from './../../api/detail'
+import { getLessonDetail, getLessonsList } from './../../api/detail'
 import { Notification, Loading } from 'element-ui'
 export default{
   state: {
-    lessonDetail: []
+    lessonDetail: [],
+    lessonsList: []
   },
   mutations: {
     SET_LESSONDETAIL(state, data) {
       state.lessonDetail = data
+    },
+    SET_LESSONSLIST(state, data) {
+      state.lessonsList = data
     }
   },
   actions: {
@@ -35,6 +39,23 @@ export default{
           })
         })
       }
+    },
+    loadLessonsList({ commit }, lessonId) {
+      if (lessonId === null || lessonId === undefined) {
+        commit('SET_LESSONSLIST', '')
+      }
+      return new Promise((resolve, reject) => {
+        getLessonsList(lessonId).then(res => {
+          commit('SET_LESSONSLIST', res.data)
+          resolve(res)
+        }).catch(err => {
+          Notification.error({
+            title: '错误',
+            message: '数据未成功加载！'
+          })
+          reject(err)
+        })
+      })
     }
   }
 }

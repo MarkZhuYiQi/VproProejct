@@ -284,7 +284,40 @@
   import { verifyTokenExpiration, getCookie, setCookie } from '@/utils/auth'
   export default{
     mounted() {
-      this.$store.dispatch('loadLessonDetail', { request_pattern: { 'cid': this.$route.params.course_id }}).then(() => {
+      this.$store.dispatch('loadLessonsList', this.$route.params.courseId).then(() => {
+        let headFlag = false
+        this.flag = true
+        // 目录生成
+        headFlag = false
+        for (const item of this.lessonsList) {
+          if (item.lessonIsChapterHead === '1') {
+            headFlag = true
+            break
+          }
+        }
+        const list = []
+        console.log(headFlag)
+        if (headFlag) {
+          for (const i of this.lessonsList) {
+            if (i.lessonIsChapterHead === '1') {
+              const chapter = i
+              i.lesson = []
+              for (const item of this.lessonsList) {
+                if (item.lessonPid === i.lessonId) {
+                  chapter.lesson.push(item)
+                }
+              }
+              list.push(chapter)
+            }
+          }
+        } else {
+          const chapter = { lesson: this.lessonsList, lessonTitle: false }
+          list.push(chapter)
+        }
+        this.list = list
+        console.log(list)
+      })
+      this.$store.dispatch('loadLessonDetail', { request_pattern: { 'cid': this.$route.params.courseId }}).then(() => {
         let headFlag = false
         this.flag = true
         const detail = this.lessonDetail.detail
@@ -467,7 +500,7 @@
       auth_id() {
         return this.$store.getters.auth_id
       },
-      ...mapGetters(['lessonDetail', 'cartInfo', 'auth_token', 'auth_id'])
+      ...mapGetters(['lessonsList', 'lessonDetail', 'cartInfo', 'auth_token', 'auth_id'])
     }
   }
 </script>

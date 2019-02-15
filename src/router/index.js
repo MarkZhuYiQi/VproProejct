@@ -57,7 +57,7 @@ export const constantRouterMap = [
         meta: { title: 'personal', auth: true }
       },
       {
-        path: 'detail/:course_id',
+        path: 'detail/:courseId',
         component: _import('detail/detail'),
         name: 'detail',
         meta: { title: 'detail' }
