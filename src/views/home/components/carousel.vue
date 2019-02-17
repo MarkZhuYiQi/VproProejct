@@ -6,7 +6,7 @@
                     :style="{
                 textAlign: 'center',
                 margin: '0 auto',
-            }"><img class="swiper-img" :src="item" alt=""></swiper-slide>
+            }"><img class="swiper-img" :src="item" alt="" style="width: 980px; height: 343px;"></swiper-slide>
             <div class="swiper-pagination"  slot="pagination"></div>
             <div class="swiper-button-prev" slot="button-prev"></div>
             <div class="swiper-button-next" slot="button-next"></div>

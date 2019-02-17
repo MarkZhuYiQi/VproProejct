@@ -9,6 +9,12 @@ export function getLessonDetail(params) {
 export function getLessonsList(courseId) {
   return request({
     method: 'get',
-    url: '/lesson/list' + courseId
+    url: '/lesson/list/' + courseId
+  })
+}
+export function getCourse(courseId) {
+  return request({
+    method: 'get',
+    url: '/course/detail/' + courseId
   })
 }

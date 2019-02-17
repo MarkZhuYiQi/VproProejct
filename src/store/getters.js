@@ -19,6 +19,9 @@ const getters = {
   couponInfo: state => state.coupon.couponInfo,
   // detailModule
   lessonDetail: state => state.detail.lessonDetail,
+  lessonsList: state => state.detail.lessonsList,
+  course: state => state.detail.course,
+  crumb: state => state.detail.crumb,
   // indexModule
   carouselBackgroundColor: state => state.index.carouselBackgroundColor,
   indexCourseList: state => state.index.indexCourseList,
@@ -29,7 +32,7 @@ const getters = {
   ordersCurrentPage: state => state.order.currentPage,
   ordersCount: state => state.order.ordersCount,
   // playerModule
-  lessonsList: state => state.player.playerInfo.lessonsList,
+  // lessonsList: state => state.player.playerInfo.lessonsList,
   // videoModule
   payment: state => state.video.payment
 }

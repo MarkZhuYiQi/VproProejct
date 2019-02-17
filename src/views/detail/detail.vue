@@ -3,20 +3,20 @@
         <div class="bread">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item v-for="item in lessonDetail.crumb" :to="{path:item.nav_url}" :key="item.nav_id">{{item.nav_text}}</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="item in this.crumb" :to="{ path:item.navId }" :key="item.navId">{{ item.navText }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="detail-main">
-            <el-row v-if="flag">
+            <el-row v-if="Object.keys(this.course).length > 0">
                 <el-col :span="10">
-                    <img :src="lessonDetail.detail.course_cover_address" alt="" class="main-img">
+                    <img :src="cloudRoot + '/' + this.course.vproCoursesCover.courseCoverKey" alt="" class="main-img">
                 </el-col>
                 <el-col :span="14">
                     <div class="main-detail">
-                        <span class="main-title">{{lessonDetail.detail.course_title}}</span>
+                        <span class="main-title">{{ this.course.courseTitle }}</span>
                         <div class="main-info">
                             <i class="el-icon-menu"></i>
-                            <span>{{lessonDetail.detail.course_clickNum}}</span>
+                            <span>{{ this.course.vproCoursesTempDetail.courseClickNum }}</span>
                             <el-rate
                                     v-model="score"
                                     disabled
@@ -29,8 +29,8 @@
                             <!--<span>{{lessonDetail.detail.course_score}}</span>-->
                         </div>
                         <div>
-                            <span class="main-price">{{lessonDetail.detail.course_price}}</span>
-                            <span class="activity-price" v-if="parseFloat(lessonDetail.detail.course_discount_price).toFixed(2)!=='-1.00'">{{lessonDetail.detail.course_discount_price}}</span>
+                            <span class="main-price">{{ parseInt(this.course.coursePrice) > 0 ? currency(this.course.coursePrice) : '免费' }}</span>
+                            <span class="activity-price" v-if="parseFloat(this.course.courseDiscountPrice).toFixed(2)!=='-1.00'">{{ currency(this.course.courseDiscountPrice) }}</span>
                         </div>
                         <div class="main-adv">现在注册即送优惠券</div>
                         <div class="clearfix"></div>
@@ -44,6 +44,12 @@
                     </div>
                 </el-col>
             </el-row>
+            <div v-else>
+                <img
+                        src="/static/loading-bubbles.svg"
+                        alt=""
+                        style="width: 50px; height: 50px; margin: 20px auto;">
+            </div>
         </div>
         <el-row :gutter="20">
             <el-col :span="18">
@@ -80,7 +86,7 @@
                                 <h3>目录</h3>
                                 <div class="chapterList" v-if="list.length">
                                     <div v-for="(l, k) in list" :key="k">
-                                        <div class="chapterHead" v-if="l.lesson_title">
+                                        <div class="chapterHead" v-if="l.lessonTitle">
                                             <span class="chapterTitle">章节{{parseInt(l.lessonLid)+1}}:</span>
                                             <span class="chapterName">{{l.lessonTitle}}</span>
                                         </div>
@@ -282,8 +288,13 @@
   import { mapGetters } from 'vuex'
   import { genNonDuplicateID } from '@/utils/index'
   import { verifyTokenExpiration, getCookie, setCookie } from '@/utils/auth'
+  import { currency } from '@/utils'
   export default{
     mounted() {
+      this.$store.dispatch('loadCourse', this.$route.params.courseId).then((res) => {
+        this.score = parseFloat(this.course.vproCoursesTempDetail.courseScore)
+        this.$store.dispatch('loadCrumb', res.coursePid)
+      })
       this.$store.dispatch('loadLessonsList', this.$route.params.courseId).then(() => {
         let headFlag = false
         this.flag = true
@@ -312,42 +323,6 @@
           }
         } else {
           const chapter = { lesson: this.lessonsList, lessonTitle: false }
-          list.push(chapter)
-        }
-        this.list = list
-        console.log(list)
-      })
-      this.$store.dispatch('loadLessonDetail', { request_pattern: { 'cid': this.$route.params.courseId }}).then(() => {
-        let headFlag = false
-        this.flag = true
-        const detail = this.lessonDetail.detail
-        this.score = parseFloat(detail.course_score)
-        // 目录生成
-        const lesson_list = this.lessonDetail.lesson_list
-        headFlag = false
-        for (const item of lesson_list) {
-          if (item.lessonIsChapterHead === '1') {
-            headFlag = true
-            break
-          }
-        }
-        const list = []
-        console.log(headFlag)
-        if (headFlag) {
-          for (const i of lesson_list) {
-            if (i.lessonIsChapterHead === '1') {
-              const chapter = i
-              i.lesson = []
-              for (const item of lesson_list) {
-                if (item.lessonPid === i.lessonId) {
-                  chapter.lesson.push(item)
-                }
-              }
-              list.push(chapter)
-            }
-          }
-        } else {
-          const chapter = { lesson: lesson_list, lessonTitle: false }
           list.push(chapter)
         }
         this.list = list
@@ -500,7 +475,7 @@
       auth_id() {
         return this.$store.getters.auth_id
       },
-      ...mapGetters(['lessonsList', 'lessonDetail', 'cartInfo', 'auth_token', 'auth_id'])
+      ...mapGetters(['cloudRoot', 'crumb', 'course', 'lessonsList', 'lessonDetail', 'cartInfo', 'auth_token', 'auth_id'])
     }
   }
 </script>

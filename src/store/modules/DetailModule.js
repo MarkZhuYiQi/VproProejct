@@ -1,9 +1,12 @@
-import { getLessonDetail, getLessonsList } from './../../api/detail'
+import { getLessonDetail, getLessonsList, getCourse } from './../../api/detail'
 import { Notification, Loading } from 'element-ui'
+import { getCrumb } from '../../api/category'
 export default{
   state: {
     lessonDetail: [],
-    lessonsList: []
+    lessonsList: [],
+    course: {},
+    crumb: {}
   },
   mutations: {
     SET_LESSONDETAIL(state, data) {
@@ -11,6 +14,12 @@ export default{
     },
     SET_LESSONSLIST(state, data) {
       state.lessonsList = data
+    },
+    SET_COURSE(state, data) {
+      state.course = data
+    },
+    SET_CRUMB(state, data) {
+      state.crumb = data
     }
   },
   actions: {
@@ -40,18 +49,46 @@ export default{
         })
       }
     },
-    loadLessonsList({ commit }, lessonId) {
-      if (lessonId === null || lessonId === undefined) {
+    loadLessonsList({ commit }, courseId) {
+      if (courseId === null || courseId === undefined) {
         commit('SET_LESSONSLIST', '')
       }
       return new Promise((resolve, reject) => {
-        getLessonsList(lessonId).then(res => {
+        getLessonsList(courseId).then(res => {
           commit('SET_LESSONSLIST', res.data)
           resolve(res)
         }).catch(err => {
           Notification.error({
             title: '错误',
-            message: '数据未成功加载！'
+            message: '课程列表未成功加载！'
+          })
+          reject(err)
+        })
+      })
+    },
+    loadCourse({ commit }, courseId) {
+      return new Promise((resolve, reject) => {
+        getCourse(courseId).then(res => {
+          commit('SET_COURSE', res.data)
+          resolve(res.data)
+        }).catch(err => {
+          Notification.error({
+            title: '错误',
+            message: '课程信息未成功加载！'
+          })
+          reject(err)
+        })
+      })
+    },
+    loadCrumb({ commit }, navId) {
+      return new Promise((resolve, reject) => {
+        getCrumb(navId).then(res => {
+          commit('SET_CRUMB', res.data)
+          resolve(res.data)
+        }).catch(err => {
+          Notification.error({
+            title: '错误',
+            message: '面包屑导航未成功加载！'
           })
           reject(err)
         })

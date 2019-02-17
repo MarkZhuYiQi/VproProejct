@@ -20,3 +20,9 @@ export function getNavTree() {
     'method': 'get'
   })
 }
+export function getCrumb(navId) {
+  return request({
+    url: '/category/crumb/' + navId,
+    method: 'get'
+  })
+}
