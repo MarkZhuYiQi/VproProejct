@@ -7,13 +7,13 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-                <el-input name="username" type="text" v-model="loginForm.user_name" autoComplete="on" placeholder="username" />
+                <el-input name="username" type="text" v-model="loginForm.appId" autoComplete="on" placeholder="username" />
             </el-form-item>
             <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
-                <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.user_pass" autoComplete="on"
+                <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.appKey" autoComplete="on"
                           placeholder="password"></el-input>
                 <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
             </el-form-item>
@@ -27,12 +27,14 @@
                 <!--<span> password: admin</span>-->
             </div>
         </el-form>
-        <textarea name="pubkey" ref="pubkey" cols="30" rows="10" style="display: none">-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDwYV4IPkfNau3aUVojBYAlTH0Z
-K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
-+gGPuzmOJDFUttRrkHNcgA1RnBwfdSg0x4wVN0vwnNYn1Wzni9urTC3weDEYTLpF
-/DBPATaN1lnCFzwciwIDAQAB
------END PUBLIC KEY-----</textarea>
+        <textarea name="pubkey" ref="pubkey" cols="30" rows="10" style="display: none">
+          -----BEGIN PUBLIC KEY-----
+          MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD5MPAoPanethCu9+P6QrwSzWCZ
+          E/iiRPyS5vq0HQBIpICv6Syx45N5Y/A6bec6KLefhYX8CpYquFbNTu2V9BW4QLQf
+          l78yBJS90EkEh2Q/+Ep6fIjlU3Lud3jy3vOqiCm/HwTBiiic20TBmxC84wXOY7r0
+          s3usGiDpXPS2HmH5fQIDAQAB
+          -----END PUBLIC KEY-----
+        </textarea>
     </div>
 </template>
 <style>
@@ -142,12 +144,12 @@ K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
           height: '0px'
         },
         loginForm: {
-          user_name: 'mark',
-          user_pass: 'Ups123'
+          appId: 'mark',
+          appKey: 'Ups123'
         },
         loginRules: {
-          user_name: [{ required: true, trigger: 'blur', validator: validateUsername }],
-          user_pass: [{ required: true, trigger: 'blur', validator: validatePass }]
+          appId: [{ required: true, trigger: 'blur', validator: validateUsername }],
+          appKey: [{ required: true, trigger: 'blur', validator: validatePass }]
         },
         loading: false,
         pwdType: 'password'

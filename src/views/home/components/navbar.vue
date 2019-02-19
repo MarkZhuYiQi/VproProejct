@@ -38,13 +38,13 @@
                     <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="手机登录" name="first">
                             <el-form :model="loginByPhone" :rules="telRules" ref="loginByPhone" label-width="100px">
-                                <el-form-item label="手机号：" prop="account" >
-                                    <el-input v-model="loginByPhone.account" auto-complete="off" size="large" placeholder="请输入手机号码" :disabled="true">
+                                <el-form-item label="手机号：" prop="appId" >
+                                    <el-input v-model="loginByPhone.appId" auto-complete="off" size="large" placeholder="请输入手机号码" :disabled="true">
                                         <template slot="prepend">+86</template>
                                     </el-input>
                                 </el-form-item>
-                                <el-form-item label="密码：" prop="pass">
-                                    <el-input type="password" v-model="loginByPhone.pass" size="large" placeholder="请输入密码" :disabled="true"></el-input>
+                                <el-form-item label="密码：" prop="appKey">
+                                    <el-input type="password" v-model="loginByPhone.appKey" size="large" placeholder="请输入密码" :disabled="true"></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="UserLogin('loginByPhone')" size="large">提交</el-button>
@@ -54,9 +54,9 @@
                         </el-tab-pane>
                         <el-tab-pane label="邮箱登录" name="second">
                             <el-form :model="loginByEmail" :rules="emailRules" ref="loginByEmail" label-width="100px">
-                                <el-form-item label="邮箱：" prop="account" >
+                                <el-form-item label="邮箱：" prop="appId" >
                                     <el-autocomplete
-                                            v-model="loginByEmail.account"
+                                            v-model="loginByEmail.appId"
                                             auto-complete="off"
                                             size="large"
                                             placeholder="请输入邮箱地址"
@@ -66,8 +66,8 @@
                                             :disabled="true"
                                     ></el-autocomplete>
                                 </el-form-item>
-                                <el-form-item label="密码：" prop="pass">
-                                    <el-input type="password" v-model="loginByEmail.pass" size="large" placeholder="请输入密码" :disabled="true"></el-input>
+                                <el-form-item label="密码：" prop="appKey">
+                                    <el-input type="password" v-model="loginByEmail.appKey" size="large" placeholder="请输入密码" :disabled="true"></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="UserLogin('loginByEmail')" size="large">提交</el-button>
@@ -77,11 +77,11 @@
                         </el-tab-pane>
                         <el-tab-pane label="用户名登录" name="third">
                             <el-form :model="loginByUser" :rules="userRules" ref="loginByUser" label-width="100px">
-                                <el-form-item label="用户名：" prop="account" >
-                                    <el-input type="text" v-model="loginByUser.account" size="large" placeholder="请输入用户名"></el-input>
+                                <el-form-item label="用户名：" prop="appId" >
+                                    <el-input type="text" v-model="loginByUser.appId" size="large" placeholder="请输入用户名"></el-input>
                                 </el-form-item>
-                                <el-form-item label="密码：" prop="pass">
-                                    <el-input type="password" v-model="loginByUser.pass" size="large" placeholder="请输入密码"></el-input>
+                                <el-form-item label="密码：" prop="appKey">
+                                    <el-input type="password" v-model="loginByUser.appKey" size="large" placeholder="请输入密码"></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="UserLogin('loginByUser')" size="large">提交</el-button>
@@ -184,38 +184,38 @@ K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
           '@vip.qq.com'
         ],
         loginByPhone: {
-          account: '',
-          pass: ''
+          appId: '',
+          appKey: ''
         },
         telRules: {
-          account: [
+          appId: [
             { validator: validateTel, trigger: 'blur' }
           ],
-          pass: [
+          appKey: [
             { validator: validatePass, trigger: 'blur' }
           ]
         },
         loginByEmail: {
-          account: '',
-          pass: ''
+          appId: '',
+          appKey: ''
         },
         emailRules: {
-          account: [
+          appId: [
             { validator: validateEmail, trigger: 'blur' }
           ],
-          pass: [
+          appKey: [
             { validator: validatePass, trigger: 'blur' }
           ]
         },
         loginByUser: {
-          account: 'mark',
-          pass: 'Ups123'
+          appId: 'mark',
+          appKey: 'Ups123'
         },
         userRules: {
-          account: [
+          appId: [
             { validator: validateUser, trigger: 'blur' }
           ],
-          pass: [
+          appKey: [
             { validator: validatePass, trigger: 'blur' }
           ]
         }
@@ -291,9 +291,10 @@ K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
         this.$refs[formName].validate((v) => {
           if (v) {
             const userInfo = {
-              user_name: this[formName]['account'],
-              user_pass: this[formName]['pass']
+              appId: this[formName]['appId'],
+              appKey: this[formName]['appKey']
             }
+            console.log(userInfo)
             const userEnData = encrypt(userInfo, this.$refs.pubkey.value)
             this.$store.dispatch('frontUserLogin', { data: userEnData }).then(() => {
               location.reload()

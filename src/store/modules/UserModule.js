@@ -10,26 +10,28 @@ export default{
     loginRequired: false,
     step: 0,
     userObj: {
-      get auth_token() {
-        const auth_token = localStorage.getItem('auth_token')
-        if (auth_token === null || auth_token === undefined) {
+      get authToken() {
+        const authToken = localStorage.getItem('authToken')
+        if (authToken === null || authToken === undefined) {
           return false
         }
-        return auth_token
+        return authToken
       },
-      get auth_id() {
-        const auth_id = localStorage.getItem('auth_id')
-        if (auth_id === null || auth_id === undefined) {
+      // 用户ID
+      get authId() {
+        const authId = localStorage.getItem('authId')
+        if (authId === null || authId === undefined) {
           return false
         }
-        return auth_id
+        return authId
       },
-      get auth_appid() {
-        const auth_appid = localStorage.getItem('auth_appid')
-        if (auth_appid === null || auth_appid === undefined) {
+      // 用户名
+      get appId() {
+        const appId = localStorage.getItem('appId')
+        if (appId === null || appId === undefined) {
           return false
         }
-        return auth_appid
+        return appId
       }
     }
   },
@@ -106,15 +108,16 @@ export default{
     },
     frontUserLogin(context, { data }) {
       return new Promise((resolve, reject) => {
+        console.log(data)
         userLogin(data).then((res) => {
           if (res.data) {
-            const auth_token = res.data.auth_token
-            const payload = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(auth_token.split('.')[1]))
-            if (payload.auth_id && payload.auth_appid) {
+            const authToken = res.data.authToken
+            const payload = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(authToken.split('.')[1]))
+            if (payload.authId && payload.appId) {
               const userObj = {
-                auth_id: payload.auth_id,
-                auth_appid: payload.auth_appid,
-                auth_token: auth_token
+                authId: payload.authId,
+                appId: payload.appId,
+                authToken: authToken
               }
               context.commit('SET_USER_DATA', { data: userObj })
               context.commit('SET_LOCALSTORAGE_DATA', { data: userObj })
@@ -137,7 +140,7 @@ export default{
       return new Promise((resolve, reject) => {
         getInfo(state.userObj.auth_token).then(response => {
           const data = response.data
-          const userObj = { auth_id: data.id, auth_appid: data.name, auth_token: localStorage.getItem('auth_token') }
+          const userObj = { auth_id: data.id, auth_appid: data.name, auth_token: localStorage.getItem('authToken') }
           commit('SET_USER_DATA', { data: userObj })
           commit('SET_LOCALSTORAGE_DATA', { data: userObj })
           resolve(response)
@@ -150,7 +153,7 @@ export default{
       commit('SET_LOGIN', data)
     },
     step1(context, regInfo) {
-      if (regInfo.user_name !== '' && regInfo.user_pass !== '' && regInfo.user_id !== '') {
+      if (regInfo.appId !== '' && regInfo.appKey !== '' && regInfo.authId !== '') {
         for (const i in regInfo) {
           context.commit('setUserData', { key: i, value: regInfo[i], container: 'userObj' })
         }
