@@ -150,7 +150,7 @@
         console.log(tab, event)
       },
       getMyCourses() {
-        this.$store.dispatch('getMyCourses', { user_id: this.auth_id }).then(res => {
+        this.$store.dispatch('getMyCourses', { user_id: this.authId }).then(res => {
           this.courses = res.data
           console.log(this.courses)
         })
@@ -160,6 +160,6 @@
       }
     },
     computed: {
-      ...mapGetters(['auth_appid', 'auth_id', 'cloudRoot'])
+      ...mapGetters(['auth_appid', 'authId', 'cloudRoot'])
     }}
 </script>

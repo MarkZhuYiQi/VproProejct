@@ -39,7 +39,7 @@
       handleCurrentChange(val) {
         this.$store.dispatch('clearOrders').then(() => {
           this.currentPage = val
-          const data = { 'user_id': this.auth_id, 'p': val }
+          const data = { 'user_id': this.authId, 'p': val }
           if (this.status !== -1) data.status = this.status
           this.$store.dispatch('getOrders', data)
         })

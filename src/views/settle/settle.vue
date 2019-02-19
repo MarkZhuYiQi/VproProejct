@@ -287,7 +287,7 @@
     methods: {
       handleClick(tab, event) {
         if (tab.$el.id === 'pane-vaild') {
-          this.$store.dispatch('getCoupon', { user_id: this.auth_id }).then(() => {
+          this.$store.dispatch('getCoupon', { user_id: this.authId }).then(() => {
 
           })
         }
@@ -316,13 +316,13 @@
       putOrder() {
         this.btnStatus = true
         const cartIds = JSON.parse(getLocalData('cart_ids'))
-        if (this.auth_id && this.auth_token && cartIds.length > 0) {
+        if (this.authId && this.token && cartIds.length > 0) {
           const w = window.open()
           if (this.orderInfo.length > 0 && this.summaryPrice >= 0) {
             this.$store.dispatch('checkCourses', { order_course_ids: cartIds }).then(() => {
               console.log('insert')
               const info = {
-                user_id: this.auth_id,
+                user_id: this.authId,
                 order_course_ids: JSON.parse(getLocalData('cart_ids')),
                 cart_parent_id: this.cartInfo.cartId,
                 course_price: this.coursePrice,
@@ -378,7 +378,7 @@
       }
     },
     computed: {
-      ...mapGetters(['cartInfo', 'orderInfo', 'auth_id', 'couponInfo', 'auth_token', 'auth_appid']),
+      ...mapGetters(['cartInfo', 'orderInfo', 'authId', 'couponInfo', 'token', 'auth_appid']),
       payment() {
         return this.$store.getters.payment
       },

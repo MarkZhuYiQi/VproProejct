@@ -16,7 +16,7 @@ export function removeToken() {
   return Cookies.remove(TokenKey)
 }
 export function getLocalToken() {
-  return localStorage.getItem('authToken')
+  return localStorage.getItem('token')
 }
 export function encrypt(data, pubKey) {
   const jsencrypt = new JSEncrypt()
@@ -27,9 +27,9 @@ export function encrypt(data, pubKey) {
   }
   return enData
 }
-export function verifyTokenExpiration(auth_token) {
-  const payload = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(auth_token.split('.')[1]))
-  if (payload.authId && payload.appId && payload.exp) {
+export function verifyTokenExpiration(token) {
+  const payload = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(token.split('.')[1]))
+  if (payload.id && payload.appid && payload.exp) {
     return (parseInt(payload.exp) > parseInt(String((new Date()).getTime()).substr(0, 10)))
   }
 }

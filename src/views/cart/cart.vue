@@ -176,11 +176,11 @@
 
   export default{
     mounted() {
-      console.log(this.auth_token)
-      if (this.auth_token !== undefined && this.auth_token !== null) {
-        if (verifyTokenExpiration(this.auth_token)) {
+      console.log(this.token)
+      if (this.token !== undefined && this.token !== null) {
+        if (verifyTokenExpiration(this.token)) {
           const cart_ref = {
-            'cart_userid': this.auth_id
+            'cart_userid': this.authId
           }
           this.$store.dispatch('loadCart', cart_ref).then(() => {
             if (this.cartInfo.length > 0) {
@@ -253,14 +253,14 @@
       deleteCartItem(course_id) {
         let originCart = {}
         let cart = {}
-        if (this.auth_token === null || this.auth_token === undefined) {
+        if (this.token === null || this.token === undefined) {
           cart = JSON.parse(getCookie('cart'))
           originCart = cart.cart_detail
           cart['is_login'] = false
         } else {
           originCart = this.cartInfo
           cart['is_login'] = true
-          cart['cart_userid'] = this.auth_id
+          cart['cart_userid'] = this.authId
         }
         cart.cart_detail = originCart.cartInfo.filter(item => {
           if (item.cart_course_id === course_id) {
@@ -299,7 +299,7 @@
       }
     },
     computed: {
-      ...mapGetters(['cartInfo', 'orderInfo', 'auth_id', 'auth_token'])
+      ...mapGetters(['cartInfo', 'orderInfo', 'authId', 'token'])
     }
   }
 </script>

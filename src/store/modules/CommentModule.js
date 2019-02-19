@@ -82,7 +82,7 @@ export default{
     },
     setComment(context, data) {
       return new Promise((resolve, reject) => {
-        data['user_id'] = context.getters['auth_id']
+        data['user_id'] = context.getters['authId']
         console.log(data)
         setComment(data).then(res => {
           resolve(res)

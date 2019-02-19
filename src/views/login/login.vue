@@ -28,12 +28,12 @@
             </div>
         </el-form>
         <textarea name="pubkey" ref="pubkey" cols="30" rows="10" style="display: none">
-          -----BEGIN PUBLIC KEY-----
-          MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD5MPAoPanethCu9+P6QrwSzWCZ
-          E/iiRPyS5vq0HQBIpICv6Syx45N5Y/A6bec6KLefhYX8CpYquFbNTu2V9BW4QLQf
-          l78yBJS90EkEh2Q/+Ep6fIjlU3Lud3jy3vOqiCm/HwTBiiic20TBmxC84wXOY7r0
-          s3usGiDpXPS2HmH5fQIDAQAB
-          -----END PUBLIC KEY-----
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD5MPAoPanethCu9+P6QrwSzWCZ
+E/iiRPyS5vq0HQBIpICv6Syx45N5Y/A6bec6KLefhYX8CpYquFbNTu2V9BW4QLQf
+l78yBJS90EkEh2Q/+Ep6fIjlU3Lud3jy3vOqiCm/HwTBiiic20TBmxC84wXOY7r0
+s3usGiDpXPS2HmH5fQIDAQAB
+-----END PUBLIC KEY-----
         </textarea>
     </div>
 </template>

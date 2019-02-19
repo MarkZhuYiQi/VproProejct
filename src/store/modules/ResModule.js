@@ -17,7 +17,7 @@ export default{
   },
   actions: {
     loadData(context, { url, key }) {
-      console.log(context.rootState.user.userObj.auth_token)
+      console.log(context.rootState.user.userObj.token)
       if (context.state[key].length === 0) {
         const loading = Vue.prototype.$loading({
           text: '正在加载中'

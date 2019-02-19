@@ -52,7 +52,7 @@
               url: this.APIConfig.getOrder,
               key: 'orderHistory',
               request_pattern: {
-                'user_id': localStorage.getItem('auth_id'),
+                'user_id': localStorage.getItem('authId'),
                 'p': val
               }
             })

@@ -10,12 +10,12 @@ export default{
     loginRequired: false,
     step: 0,
     userObj: {
-      get authToken() {
-        const authToken = localStorage.getItem('authToken')
-        if (authToken === null || authToken === undefined) {
+      get token() {
+        const token = localStorage.getItem('token')
+        if (token === null || token === undefined) {
           return false
         }
-        return authToken
+        return token
       },
       // 用户ID
       get authId() {
@@ -60,7 +60,7 @@ export default{
   },
   actions: {
     auth(context, url) {
-      Axios.get(url + '?token=' + context.state.userObj.auth_token).then().catch()
+      Axios.get(url + '?token=' + context.state.userObj.token).then().catch()
     },
     loadUserStep(context, { url, key }) {
       if (Object.keys(context.state.userObj).length > 0) {
@@ -111,14 +111,16 @@ export default{
         console.log(data)
         userLogin(data).then((res) => {
           if (res.data) {
-            const authToken = res.data.authToken
-            const payload = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(authToken.split('.')[1]))
-            if (payload.authId && payload.appId) {
+            const token = res.data.token
+            const payload = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(token.split('.')[1]))
+            console.log(payload)
+            if (payload.id && payload.appid) {
               const userObj = {
-                authId: payload.authId,
-                appId: payload.appId,
-                authToken: authToken
+                authId: payload.authid,
+                appId: payload.appid,
+                token: token
               }
+              console.log(userObj)
               context.commit('SET_USER_DATA', { data: userObj })
               context.commit('SET_LOCALSTORAGE_DATA', { data: userObj })
               resolve(res)
@@ -138,9 +140,9 @@ export default{
     },
     getInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.userObj.auth_token).then(response => {
+        getInfo(state.userObj.token).then(response => {
           const data = response.data
-          const userObj = { auth_id: data.id, auth_appid: data.name, auth_token: localStorage.getItem('authToken') }
+          const userObj = { authId: data.id, appId: data.name, token: localStorage.getItem('token') }
           commit('SET_USER_DATA', { data: userObj })
           commit('SET_LOCALSTORAGE_DATA', { data: userObj })
           resolve(response)

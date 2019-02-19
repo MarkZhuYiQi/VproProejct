@@ -81,31 +81,31 @@
       },
       loadOrders() {
         this.loading = true
-        this.$store.dispatch('getOrders', { 'user_id': this.auth_id }).then(res => {
+        this.$store.dispatch('getOrders', { 'user_id': this.authId }).then(res => {
           this.loading = false
         })
       },
       loadUnpaidOrders() {
         this.loading = true
-        this.$store.dispatch('getOrders', { 'user_id': this.auth_id, 'status': 0 }).then(res => {
+        this.$store.dispatch('getOrders', { 'user_id': this.authId, 'status': 0 }).then(res => {
           this.loading = false
         })
       },
       loadSuccessOrders() {
         this.loading = true
-        this.$store.dispatch('getOrders', { 'user_id': this.auth_id, 'status': 1 }).then(res => {
+        this.$store.dispatch('getOrders', { 'user_id': this.authId, 'status': 1 }).then(res => {
           this.loading = false
         })
       },
       loadErrorOrders() {
         this.loading = true
-        this.$store.dispatch('getOrders', { 'user_id': this.auth_id, 'status': 2 }).then(res => {
+        this.$store.dispatch('getOrders', { 'user_id': this.authId, 'status': 2 }).then(res => {
           this.loading = false
         })
       }
     },
     computed: {
-      ...mapGetters(['ordersHistory', 'ordersCount', 'ordersCurrentPage', 'auth_id'])
+      ...mapGetters(['ordersHistory', 'ordersCount', 'ordersCurrentPage', 'authId'])
     }
   }
 </script>

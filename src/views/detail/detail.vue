@@ -356,10 +356,10 @@
         }
       },
       initCart() {
-        if (this.auth_token !== 'undefined' && this.auth_token !== null) {
+        if (this.token !== 'undefined' && this.token !== null) {
           // 有token记录，用户登录过
-          if (verifyTokenExpiration(this.auth_token)) {
-            this.$store.dispatch('loadCart', { 'cart_userid': this.auth_id }).then(() => {
+          if (verifyTokenExpiration(this.token)) {
+            this.$store.dispatch('loadCart', { 'cart_userid': this.authId }).then(() => {
 
             })
           }
@@ -376,18 +376,18 @@
        *
        */
       addToCart() {
-        if (this.auth_token !== 'undefined' && this.auth_token !== null) {
+        if (this.token !== 'undefined' && this.token !== null) {
           // 有token记录，用户登录过
-          if (verifyTokenExpiration(this.auth_token)) {
+          if (verifyTokenExpiration(this.token)) {
             // token未过期，直接发送给后台，加入购物车
             const cart_ref = {
-              'cart_userid': this.auth_id
+              'cart_userid': this.authId
             }
             this.$store.dispatch('loadCart', cart_ref).then(() => {
               // 获得购物车信息，如果cartId为-1说明没有购物车信息，需要下次创建；否则说明已经有购物车条目了。
               const cart_id = this.cartInfo.cartId === -1 ? genNonDuplicateID() : this.cartInfo.cartId
               const cartInfo = {
-                'cart_userid': this.auth_id,
+                'cart_userid': this.authId,
                 cart_id,
                 'cart_is_existed': this.cartInfo.cartId === -1 ? 0 : 1,
                 'cart_detail': []
@@ -472,10 +472,10 @@
       }
     },
     computed: {
-      auth_id() {
-        return this.$store.getters.auth_id
+      authId() {
+        return this.$store.getters.authId
       },
-      ...mapGetters(['cloudRoot', 'crumb', 'course', 'lessonsList', 'lessonDetail', 'cartInfo', 'auth_token', 'auth_id'])
+      ...mapGetters(['cloudRoot', 'crumb', 'course', 'lessonsList', 'lessonDetail', 'cartInfo', 'token', 'authId'])
     }
   }
 </script>

@@ -4,8 +4,8 @@ const getters = {
   // userModule
   getStep: state => state.user.step,
   auth_appid: state => state.user.userObj.auth_appid,
-  auth_id: state => state.user.userObj.auth_id,
-  auth_token: state => state.user.userObj.auth_token,
+  authId: state => state.user.userObj.authId,
+  token: state => state.user.userObj.token,
   loginRequired: state => state.user.loginRequired,
   // cartModule
   cartInfo: state => state.cart.cartInfo,

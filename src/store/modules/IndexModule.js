@@ -42,7 +42,7 @@ export default{
       if (nav === undefined || nav === null || nav === '') nav = 0
       // 每次切换页面时清空页面数据，否则会有缓存之前的图片
       context.commit('SET_INDEXCOURSELIST', '')
-      // requestPattern.token = context.rootState.user.userObj.auth_token
+      // requestPattern.token = context.rootState.user.userObj.token
       if (context.state.indexCourseList.length === 0 || Object.keys(context.state.indexCourseList).length === 0) {
         const loading = Loading.service({
           text: '正在加载中'

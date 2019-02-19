@@ -93,12 +93,14 @@
                 </div>
             </modal>
         </div>
-        <textarea name="pubkey" ref="pubkey" cols="30" rows="10" style="display: none">-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDwYV4IPkfNau3aUVojBYAlTH0Z
-K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
-+gGPuzmOJDFUttRrkHNcgA1RnBwfdSg0x4wVN0vwnNYn1Wzni9urTC3weDEYTLpF
-/DBPATaN1lnCFzwciwIDAQAB
------END PUBLIC KEY-----</textarea>
+        <textarea name="pubkey" ref="pubkey" cols="30" rows="10" style="display: none">
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD5MPAoPanethCu9+P6QrwSzWCZ
+E/iiRPyS5vq0HQBIpICv6Syx45N5Y/A6bec6KLefhYX8CpYquFbNTu2V9BW4QLQf
+l78yBJS90EkEh2Q/+Ep6fIjlU3Lud3jy3vOqiCm/HwTBiiic20TBmxC84wXOY7r0
+s3usGiDpXPS2HmH5fQIDAQAB
+-----END PUBLIC KEY-----
+        </textarea>
     </div>
 </template>
 <script>
@@ -110,7 +112,8 @@ K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
       this.modalWidth = window.innerWidth < MODAL_WIDTH
         ? MODAL_WIDTH / 2
         : MODAL_WIDTH
-      this.isLogin = !!((this.auth_token) && verifyTokenExpiration(this.auth_token))
+      this.isLogin = !!((this.token) && verifyTokenExpiration(this.token))
+      console.log(this.token, verifyTokenExpiration(this.token))
     },
     mounted() {
       this.$root.$on('showLogin', function() {
@@ -315,7 +318,7 @@ K+4qGxYpmUMvbVy/cPBl++LNZjxa18IDvrbmeBUIJK3KwbTq8STA6bEPWQUtCU7Z
       }
     },
     computed: {
-      ...mapGetters(['auth_token', 'loginRequired', 'cloudRoot'])
+      ...mapGetters(['token', 'loginRequired', 'cloudRoot'])
     }
   }
 </script>
