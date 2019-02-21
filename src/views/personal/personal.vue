@@ -27,11 +27,11 @@
                         <el-row :gutter="30">
                             <el-col :span="6" v-for="(item,i) in courses" :key="i">
                                 <el-card :body-style="{ padding: '0px' }">
-                                    <div class="image" @click="jumpTo(item.course_id)">
-                                        <img :src="item.course_cover_address+'?imageView2/1/w/276/h/153/format/jpg/interlace/1/q/100'">
+                                    <div class="image" @click="jumpTo(item.courseId)">
+                                        <img :src="item.courseCoverAddress+'?imageView2/1/w/276/h/153/format/jpg/interlace/1/q/100'">
                                     </div>
                                     <div class="des">
-                                        <span class="projectTitle" @click="jumpTo(item.course_id)">{{item.course_title}}</span>
+                                        <span class="projectTitle" @click="jumpTo(item.courseId)">{{item.courseTitle}}</span>
                                         <div class="bottom clearfix">
                                             <time class="time">已学习7/24课时</time>
                                         </div>
@@ -155,8 +155,8 @@
           console.log(this.courses)
         })
       },
-      jumpTo(course_id) {
-        window.open('http://' + window.location.host + '/#/detail/' + course_id)
+      jumpTo(courseId) {
+        window.open('http://' + window.location.host + '/#/detail/' + courseId)
       }
     },
     computed: {

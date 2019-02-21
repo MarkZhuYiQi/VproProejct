@@ -3,13 +3,13 @@
         <el-row class="rec-card" :gutter="10" v-for="(item, i) in recInfo" :key="i" v-if="recInfo.length">
             <el-col :span="10">
                 <div>
-                    <img :style="{ width: recSize.width + 'px', height: recSize.height + 'px' }" :src="item.course_cover_address" alt="" @click="jumpTo(item.course_id)">
+                    <img :style="{ width: recSize.width + 'px', height: recSize.height + 'px' }" :src="item.courseCoverAddress" alt="" @click="jumpTo(item.courseId)">
                 </div>
             </el-col>
             <el-col :span="14">
                 <div>
-                    <span class="rec-title">{{item.course_title}}</span>
-                    <span class="rec-author">{{item.course_author}}</span>
+                    <span class="rec-title">{{item.courseTitle}}</span>
+                    <span class="rec-author">{{item.courseAuthor}}</span>
                 </div>
             </el-col>
         </el-row>
@@ -58,7 +58,7 @@
     },
     methods: {
       loadRec() {
-        const courseId = this.$route.query.course_id
+        const courseId = this.$route.query.courseId
         if (courseId) {
           this.$store.dispatch('getRecCourses', { courseId }).then(res => {
             this.recInfo = res.data

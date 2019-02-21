@@ -38,8 +38,8 @@
                                             <span>{{v.vpro_comment_content}}</span>
                                         </div>
                                         <div class="comment-support"
-                                             :course_id="v.vpro_comment_course_id"
-                                             :lesson_id="v.vpro_comment_lesson_id"
+                                             :courseId="v.vpro_commentCourseId"
+                                             :lessonId="v.vpro_comment_lessonId"
                                              :reply_id="v.vpro_comment_reply_id"
                                              :reply_main_id="v.vpro_comment_reply_main_id"
                                              :comment_id="v.vpro_comment_id"
@@ -72,8 +72,8 @@
                                 <span>{{item.vpro_comment_content}}</span>
                             </div>
                             <div class="comment-support"
-                                 :course_id="item.vpro_comment_course_id"
-                                 :lesson_id="item.vpro_comment_lesson_id"
+                                 :courseId="item.vpro_commentCourseId"
+                                 :lessonId="item.vpro_comment_lessonId"
                                  :reply_id="item.vpro_comment_reply_id"
                                  :reply_main_id="item.vpro_comment_reply_main_id"
                                  :comment_id="item.vpro_comment_id"
@@ -228,14 +228,14 @@
     },
     mounted() {
       if (Object.keys(this.$route.query).length > 0) {
-        [this.course_id, this.lesson_id] = [this.$route.query.course_id, this.$route.query.lesson_id]
+        [this.courseId, this.lessonId] = [this.$route.query.courseId, this.$route.query.lessonId]
         this.combineComments()
       }
     },
     data() {
       return {
-        course_id: '',
-        lesson_id: '',
+        courseId: '',
+        lessonId: '',
         reply: '',
         pop_is_showed: true,
         comments: [],
@@ -286,10 +286,10 @@
       getCommentSupportRate(comments_ids) {
         return this.$store.dispatch('getCommentSupportRate', { comments_ids })
       },
-      getComment(lesson_id = this.lesson_id, p = this.pages.currentPage) {
+      getComment(lessonId = this.lessonId, p = this.pages.currentPage) {
         this.loading = true
         return new Promise((resolve, reject) => {
-          this.$store.dispatch('getComment', { lesson_id, p }).then((res) => {
+          this.$store.dispatch('getComment', { lessonId, p }).then((res) => {
             this.loading = false
             this.comments = res.data.comments
             this.pages.total = res.data.comments_length
@@ -323,8 +323,8 @@
       },
       replyComment(obj) {
         this.$store.dispatch('setComment', {
-          comment_course_id: obj.vpro_comment_course_id,
-          comment_lesson_id: obj.vpro_comment_lesson_id,
+          commentCourseId: obj.vpro_commentCourseId,
+          comment_lessonId: obj.vpro_comment_lessonId,
           comment_reply_id: obj.vpro_comment_id,
           comment_reply_main_id: obj.vpro_comment_reply_main_id === '0' ? obj.vpro_comment_id : obj.vpro_comment_reply_main_id,
           comment_content: this.reply
@@ -379,7 +379,7 @@
             this.comments.splice(i, 1, this.comments[i])
           }
         }
-        this.$store.dispatch('setCommentSupportRate', { type, comment_id: v.vpro_comment_id, lesson_id: v.vpro_comment_lesson_id }).then(res => {
+        this.$store.dispatch('setCommentSupportRate', { type, comment_id: v.vpro_comment_id, lessonId: v.vpro_comment_lessonId }).then(res => {
           if (parseInt(res) > 0) {
             this.$store.dispatch('setRateForbidden', { commentId: v.vpro_comment_id })
           }

@@ -10,7 +10,7 @@
             <div id="btn" style="display: none"></div>
             <el-row :gutter="20">
                 <el-col :span="24">
-                    <span class="course_label">订购人信息</span>
+                    <span class="courseLabel">订购人信息</span>
                 </el-col>
                 <el-col :span="24">
 
@@ -19,19 +19,19 @@
             <hr class="bottom-line">
             <el-row :gutter="20">
                 <el-col :span="24">
-                    <span class="course_label">订购清单</span>
+                    <span class="courseLabel">订购清单</span>
                 </el-col>
             </el-row>
             <hr class="bottom-line" />
-            <div class="course_detail" v-for="item in orderInfo">
+            <div class="courseDetail" v-for="item in orderInfo">
                 <el-row :gutter="20">
                     <el-col :span="7">
                         <div>
-                            <img :src="item.course_cover_address" alt="" class="course_image">
+                            <img :src="item.courseCoverAddress" alt="" class="courseImage">
                         </div>
                     </el-col>
-                    <el-col :span="9"><span>{{item.course_title}}</span></el-col>
-                    <el-col :span="4"><span class="course_cost">{{item.course_price}}</span></el-col>
+                    <el-col :span="9"><span>{{item.courseTitle}}</span></el-col>
+                    <el-col :span="4"><span class="courseCost">{{item.coursePrice}}</span></el-col>
                     <el-col :span="4">授课中</el-col>
                 </el-row>
                 <hr class="bottom-line" />
@@ -75,7 +75,7 @@
             </el-tabs>
             <div>
                 <div class="price_label">
-                    <ul class="course_price">
+                    <ul class="coursePrice">
                         <li><span class="summary_label">商品价格总计：</span><span class="summary_value">{{coursePrice}}</span></li>
                         <li><span class="summary_label">返现：</span><span class="summary_value">{{orderPrice.orderMoneyReturn.toFixed(2)}}</span></li>
                         <li><span class="summary_label">优惠：</span><span class="summary_value">{{orderPrice.orderCouponDiscount.toFixed(2)}}</span></li>
@@ -129,12 +129,12 @@
         box-shadow: 2px 2px 2px #cccccc;
         padding:10px;
     }
-    .course_label{
+    .courseLabel{
         margin:10px 20px 10px;
         font-weight:bold;
         display: block;
     }
-    .course_detail{
+    .courseDetail{
         margin:10px 0;
         color:#666;
     }
@@ -143,12 +143,12 @@
         border:1px solid #efefef;
         margin:0 auto;
     }
-    .course_image{
+    .courseImage{
         display:block;
         width:50%;
         margin:0 auto 10px;
     }
-    .course_cost{
+    .courseCost{
         font-size:16px;
         color: #FF4949;
         font-weight:bold;
@@ -159,10 +159,10 @@
         width:100%;
         float:right;
     }
-    .course_price{
+    .coursePrice{
         text-align:right;
     }
-    .course_price span{
+    .coursePrice span{
         display: inline-block;
     }
     .summary_label{
@@ -255,9 +255,9 @@
   export default {
     created() {
       if (this.orderInfo.length !== 0) {
-        const cart_ids = checkLocalData('cart_ids')
-        if (cart_ids) {
-          this.$store.dispatch('checkCourses', { order_course_ids: cart_ids })
+        const cartIds = checkLocalData('cartIds')
+        if (cartIds) {
+          this.$store.dispatch('checkCourses', { orderCourseIds: cartIds })
         } else {
           console.log('购物车过期或为空')
         }
@@ -315,17 +315,17 @@
        */
       putOrder() {
         this.btnStatus = true
-        const cartIds = JSON.parse(getLocalData('cart_ids'))
+        const cartIds = JSON.parse(getLocalData('cartIds'))
         if (this.authId && this.token && cartIds.length > 0) {
           const w = window.open()
           if (this.orderInfo.length > 0 && this.summaryPrice >= 0) {
-            this.$store.dispatch('checkCourses', { order_course_ids: cartIds }).then(() => {
+            this.$store.dispatch('checkCourses', { orderCourseIds: cartIds }).then(() => {
               console.log('insert')
               const info = {
                 user_id: this.authId,
-                order_course_ids: JSON.parse(getLocalData('cart_ids')),
-                cart_parent_id: this.cartInfo.cartId,
-                course_price: this.coursePrice,
+                orderCourseIds: JSON.parse(getLocalData('cartIds')),
+                cartParentId: this.cartInfo.cartId,
+                coursePrice: this.coursePrice,
                 order_coupon_discount: this.orderPrice.orderCouponDiscount,
                 order_coupon_selected: this.discountSelected
               }
@@ -372,7 +372,7 @@
         // 计算课程总价
         let price = 0
         to.map(item => {
-          price += parseFloat(item.course_price)
+          price += parseFloat(item.coursePrice)
         })
         this.coursePrice = price.toFixed(2)
       }

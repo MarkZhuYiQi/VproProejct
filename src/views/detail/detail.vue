@@ -26,7 +26,7 @@
                                     show-template="{value}"
                             >
                             </el-rate>
-                            <!--<span>{{lessonDetail.detail.course_score}}</span>-->
+                            <!--<span>{{lessonDetail.detail.courseScore}}</span>-->
                         </div>
                         <div>
                             <span class="main-price">{{ parseInt(this.course.coursePrice) > 0 ? currency(this.course.coursePrice) : '免费' }}</span>
@@ -121,8 +121,8 @@
                         <!--<el-button style="float: right;" type="text">换一批</el-button>-->
                     </div>
                     <div v-for="(item, i) in recInfo" :key="i" class="text item rec">
-                        <img @click="jumpTo(item.course_id)" :src="item.course_cover_address + '?imageView2/2/w/243/h/135/format/jpg/q/100'" alt="">
-                        <span class="rec-title" @click="jumpTo(item.course_id)">{{item.courseTitle}}</span>
+                        <img @click="jumpTo(item.courseId)" :src="item.courseCoverAddress + '?imageView2/2/w/243/h/135/format/jpg/q/100'" alt="">
+                        <span class="rec-title" @click="jumpTo(item.courseId)">{{item.courseTitle}}</span>
                         <span class="rec-author">{{item.courseAuthor}}</span>
                     </div>
                 </el-card>
@@ -348,7 +348,7 @@
         this.cartShowed = false
       },
       loadRec() {
-        const courseId = this.$route.params.course_id
+        const courseId = this.$route.params.courseId
         if (courseId) {
           this.$store.dispatch('getRecCourses', { courseId }).then(res => {
             this.recInfo = res.data
@@ -359,19 +359,19 @@
         if (this.token !== 'undefined' && this.token !== null) {
           // 有token记录，用户登录过
           if (verifyTokenExpiration(this.token)) {
-            this.$store.dispatch('loadCart', { 'cart_userid': this.authId }).then(() => {
+            this.$store.dispatch('loadCart', { 'cartUserId': this.authId }).then(() => {
 
             })
           }
         }
       },
       enterVideo(obj) {
-        window.location.href = 'http://' + window.location.host + '/#/play/?' + 'course_id=' + obj.lesson_course_id + '&' + 'lesson_id=' + obj.lesson_id
+        window.location.href = 'http://' + window.location.host + '/#/play/?' + 'courseId=' + obj.lesson_courseId + '&' + 'lessonId=' + obj.lessonId
       },
       /**
        * 加入购物车方法：
        * 1. 首先验证用户是否登录
-       *    1. 如果登录了，去后台根据cart_userid获取购物车信息
+       *    1. 如果登录了，去后台根据cartUserId获取购物车信息
        *    2. 没有登录，直接判断cookie中是否存在购物车信息，存在添加，不存在新建，同时后台插入一份
        *
        */
@@ -380,21 +380,22 @@
           // 有token记录，用户登录过
           if (verifyTokenExpiration(this.token)) {
             // token未过期，直接发送给后台，加入购物车
-            const cart_ref = {
-              'cart_userid': this.authId
+            const cartRef = {
+              'cartUserId': this.authId
             }
-            this.$store.dispatch('loadCart', cart_ref).then(() => {
+            this.$store.dispatch('loadCart', cartRef).then(() => {
               // 获得购物车信息，如果cartId为-1说明没有购物车信息，需要下次创建；否则说明已经有购物车条目了。
-              const cart_id = this.cartInfo.cartId === -1 ? genNonDuplicateID() : this.cartInfo.cartId
+              const cartId = this.cartInfo.cartId === -1 ? genNonDuplicateID() : this.cartInfo.cartId
+              // 购物车用户id，购物车id，购物车是否存在，购物车详细信息
               const cartInfo = {
-                'cart_userid': this.authId,
-                cart_id,
-                'cart_is_existed': this.cartInfo.cartId === -1 ? 0 : 1,
-                'cart_detail': []
+                'cartUserId': this.authId,
+                cartId,
+                'cartIsExisted': this.cartInfo.cartId === -1 ? 0 : 1,
+                'cartDetail': []
               }
               // 判断购物车是否有这个商品
               if (!this.courseIsExisted(this.cartInfo.cartInfo)) {
-                cartInfo.cart_detail.push({ cart_course_id: this.lessonDetail.detail.course_id, cart_parent_id: cart_id })
+                cartInfo.cartDetail.push({ cartCourseId: this.lessonDetail.detail.courseId, cartParentId: cartId })
                 // 没有就去添加
                 this.$store.dispatch('addToCart', cartInfo)
               }
@@ -410,23 +411,23 @@
           // cookie中没有购物车记录，则直接创建新cookiecart
           if (cookieCart === '') {
             cookieCart = {
-              cart_id: genNonDuplicateID(),
-              cart_detail: []
+              cartId: genNonDuplicateID(),
+              cartDetail: []
             }
           } else {
             cookieCart = JSON.parse(cookieCart)
           }
           // 如果购物车中有课程，就去判断课程是否已经存在
-          if (cookieCart.cart_detail.length !== 0) {
-            let cart_detail = []
-            cart_detail = cookieCart.cart_detail
+          if (cookieCart.cartDetail.length !== 0) {
+            let cartDetail = []
+            cartDetail = cookieCart.cartDetail
             // 筛查课程是否存在，不存在才插入， 这里的逻辑要改，复杂化了
-            if (!this.courseIsExisted(cart_detail)) {
-              cookieCart.cart_detail.push({ cart_course_id: this.lessonDetail.detail.course_id, cart_parent_id: cookieCart.cart_id, cart_is_cookie: 1 })
+            if (!this.courseIsExisted(cartDetail)) {
+              cookieCart.cartDetail.push({ cartCourseId: this.lessonDetail.detail.courseId, cartParentId: cookieCart.cartId, cartIsCookie: 1 })
             }
           } else {
             // 没有课程就直接加
-            cookieCart.cart_detail.push({ cart_course_id: this.lessonDetail.detail.course_id, cart_parent_id: cookieCart.cart_id, cart_is_cookie: 1 })
+            cookieCart.cartDetail.push({ cartCourseId: this.lessonDetail.detail.courseId, cartParentId: cookieCart.cartId, cartIsCookie: 1 })
           }
           setCookie('cart', JSON.stringify(cookieCart), 30)
           console.log(cookieCart)
@@ -441,7 +442,7 @@
        */
       courseIsExisted(cart) {
         for (const c of cart) {
-          if (c.cart_course_id === this.lessonDetail.detail.course_id) {
+          if (c.cartCourseId === this.lessonDetail.detail.courseId) {
             this.$notify.error({
               title: '错误',
               message: '购物车中已存在该商品'
@@ -457,9 +458,9 @@
       verifyCourse() {
         this.$store.dispatch('getOrderCourses', { userId: this.auth_id }).then(res => {
           if (res.data.length > 0) {
-            if (res.data.indexOf(this.$route.params.course_id) > -1) {
+            if (res.data.indexOf(this.$route.params.courseId) > -1) {
               for (const v of this.list[0].lesson) {
-                if (v['lesson_is_chapter_head'] === 0) this.enterVideo(v)
+                if (v['lessonIsChapterHead'] === 0) this.enterVideo(v)
                 break
               }
               this.$message('还没有发布任何课时哦')

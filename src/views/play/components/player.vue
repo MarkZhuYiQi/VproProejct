@@ -34,10 +34,10 @@
   require('videojs-playlist-ui/dist/videojs-playlist-ui.js')
   export default {
     created() {
-      if (Object.keys(this.$route.query).length !== 0 && this.$route.query.course_id !== undefined) {
-        this.$store.dispatch('getLessonsList', { course_id: this.$route.query.course_id }).then((res) => {
+      if (Object.keys(this.$route.query).length !== 0 && this.$route.query.courseId !== undefined) {
+        this.$store.dispatch('getLessonsList', { courseId: this.$route.query.courseId }).then((res) => {
           for (const item of res) {
-            if (item.lesson_is_chapter_head === '0') {
+            if (item.lessonIsChapterHead === '0') {
               this.source.push({
                 name: item.lesson_title,
                 description: '',
@@ -51,7 +51,7 @@
           }
           console.log(this.source)
         })
-        // if (this.$route.query.lesson_id !== undefined) {}
+        // if (this.$route.query.lessonId !== undefined) {}
       }
     },
     mounted() {

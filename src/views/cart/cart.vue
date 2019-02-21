@@ -31,26 +31,26 @@
                 <!--<el-checkbox v-model="check.checkAll" @change="checkAll">网站自营</el-checkbox>-->
                 <span><input type="checkbox" @click="checkAll" v-model="check.checkAll" class="cart-checkbox" autocomplate="off">网站自营</span>
             </div>
-            <div v-for="item in cartInfo.cartInfo" :key="item.cart_course_id" class="text item">
+              <div v-for="item in cartInfo.cartInfo" :key="item.cartCourseId" class="text item">
                 <el-row>
                     <el-col :span="1">
-                        <span><input type="checkbox" @click="checkOne(item.cart_course_id)" :checked="check.cartIds.indexOf(item.cart_course_id)>=0" class="cart-checkbox"></span>
-                        <!--<el-checkbox :checked="check.cartIds.indexOf(item.cart_course_id)>=0" @change="test" @click="checkOne(item.cart_course_id)"></el-checkbox>-->
+                        <span><input type="checkbox" @click="checkOne(item.cartCourseId)" :checked="check.cartIds.indexOf(item.cartCourseId)>=0" class="cart-checkbox"></span>
+                        <!--<el-checkbox :checked="check.cartIds.indexOf(item.cartCourseId)>=0" @change="test" @click="checkOne(item.cartCourseId)"></el-checkbox>-->
                     </el-col>
                     <el-col :span="5">
-                        <div><img class="thumbnail_cart" :src="item.cart_course_cover_address" alt="" @click="jumpToCourse(item.cart_course_id)"></div>
+                        <div><img class="thumbnail_cart" :src="item.cartCourseCoverAddress" alt="" @click="jumpToCourse(item.cartCourseId)"></div>
                     </el-col>
                     <el-col :span="9">
-                        <span style="cursor: pointer" @click="jumpToCourse(item.cart_course_id)">{{item.cart_course_title}}</span>
+                        <span style="cursor: pointer" @click="jumpToCourse(item.cartCourseId)">{{item.cartCourseTitle}}</span>
                     </el-col>
                     <el-col :span="4">
                         永久有效
                     </el-col>
                     <el-col :span="3">
-                        {{item.cart_course_price}}
+                        {{item.cartCoursePrice}}
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="text" @click="deleteCartItem(item.cart_course_id)">delete</el-button>
+                        <el-button type="text" @click="deleteCartItem(item.cartCourseId)">delete</el-button>
                     </el-col>
                 </el-row>
                 <hr class="cart-divide">
@@ -176,34 +176,37 @@
 
   export default{
     mounted() {
-      console.log(this.token)
       if (this.token !== undefined && this.token !== null) {
         if (verifyTokenExpiration(this.token)) {
-          const cart_ref = {
-            'cart_userid': this.authId
+          // 通过token检测，确认登陆
+          // 购物车ID即为用户id
+          const cartRef = {
+            'cartUserId': this.authId
           }
-          this.$store.dispatch('loadCart', cart_ref).then(() => {
+          this.$store.dispatch('loadCart', cartRef).then(() => {
             if (this.cartInfo.length > 0) {
-              this.cart_parent_id = this.cartInfo[0]['cart_parent_id']
-              addLocalData('cart_parent_id', this.cart_parent_id)
+              this.cartParentId = this.cartInfo[0]['cartParentId']
+              addLocalData('cartParentId', this.cartParentId)
             }
           })
         } else {
+          // 登陆token已经失效，弹出登陆modal
           this.$root.$emit('showLogin')
         }
       } else if (getCookie('cart') !== '') {
+        // cookie中是否存储了名为cart的信息
         const cookieCart = JSON.parse(getCookie('cart'))
-        const cart_ref = {
-          'cart_cookieid': cookieCart.cart_id
+        const cartRef = {
+          'cartCookieId': cookieCart.cartId
         }
-        this.$store.dispatch('loadCart', cart_ref).then(() => {
+        this.$store.dispatch('loadCart', cartRef).then(() => {
           console.log(this.cartInfo)
         })
       }
     },
     data: () => {
       return {
-        cart_parent_id: -1,
+        cartParentId: -1,
         check: {
           checkAll: false,
           cartIds: [],
@@ -217,7 +220,7 @@
         if (!this.check.checkAll) {
           this.check.cartIds = []
           this.cartInfo.cartInfo.map(item => {
-            this.check.cartIds.push(item.cart_course_id)
+            this.check.cartIds.push(item.cartCourseId)
           })
         } else {
           this.check.cartIds = []
@@ -228,20 +231,20 @@
         let price = 0
         this.cartInfo.cartInfo.filter((item) => {
           for (const i of this.check.cartIds) {
-            if (i === item.cart_course_id) return true
+            if (i === item.cartCourseId) return true
           }
           return false
         }).map(item => {
-          price = price + parseFloat(item.cart_course_price)
+          price = price + parseFloat(item.cartCoursePrice)
         })
         this.summaryPrice = price.toFixed(2)
       },
-      checkOne(course_id) {
-        const idIndex = this.check.cartIds.indexOf(course_id)
+      checkOne(courseId) {
+        const idIndex = this.check.cartIds.indexOf(courseId)
         if (idIndex >= 0) {
           this.check.cartIds.splice(idIndex, 1)
         } else {
-          this.check.cartIds.push(course_id)
+          this.check.cartIds.push(courseId)
         }
         if (this.cartInfo.length !== this.check.cartIds.length) {
           this.check.checkAll = false
@@ -250,48 +253,48 @@
         }
         this.priceSummary()
       },
-      deleteCartItem(course_id) {
+      deleteCartItem(courseId) {
         let originCart = {}
         let cart = {}
         if (this.token === null || this.token === undefined) {
           cart = JSON.parse(getCookie('cart'))
-          originCart = cart.cart_detail
+          originCart = cart.cartDetail
           cart['is_login'] = false
         } else {
           originCart = this.cartInfo
           cart['is_login'] = true
-          cart['cart_userid'] = this.authId
+          cart['cartUserId'] = this.authId
         }
-        cart.cart_detail = originCart.cartInfo.filter(item => {
-          if (item.cart_course_id === course_id) {
+        cart.cartDetail = originCart.cartInfo.filter(item => {
+          if (item.cartCourseId === courseId) {
             return true
           }
           return false
         })
         this.$store.dispatch('delCartItem', cart)
       },
-      jumpToCourse(course_id) {
-        window.open('http://' + window.location.host + '/#/detail/' + course_id)
+      jumpToCourse(courseId) {
+        window.open('http://' + window.location.host + '/#/detail/' + courseId)
       },
       placeOrder() {
         if (this.check.cartIds.length > 0) {
-          this.$store.dispatch('checkCourses', { order_course_ids: this.check.cartIds }).then(() => {
+          this.$store.dispatch('checkCourses', { orderCourseIds: this.check.cartIds }).then(() => {
             const checkOrder = {
               isChanged: false,
               changedId: []
             }
             // 提交订单前，检查订单商品，如果商品不存在了，那么直接删去
             this.orderInfo.map((item, i) => {
-              if (this.check.cartIds.indexOf(item.course_id.toString()) < 0) {
+              if (this.check.cartIds.indexOf(item.courseId.toString()) < 0) {
                 this.check.cartIds.splice(i, 1)
                 checkOrder.isChanged = true
-                checkOrder.changedId.push(item.course_id)
+                checkOrder.changedId.push(item.courseId)
               }
             })
             // order如果没有更改，进入下单界面
             if (!checkOrder.isChanged) {
               this.check.orderCheck = false
-              addLocalData('cart_ids', this.check.cartIds)
+              addLocalData('cartIds', this.check.cartIds)
               this.$router.push({ path: '/settle' })
             }
           })

@@ -18,7 +18,7 @@ export default{
     DEL_CARTITEM(state, courseId) {
       const cartInfo = state.cartInfo.cartInfo
       for (const i in cartInfo) {
-        if (cartInfo[i]['cart_course_id'] === courseId) {
+        if (cartInfo[i]['cartCourseId'] === courseId) {
           Vue.delete(cartInfo, i)
         }
       }
@@ -58,9 +58,9 @@ export default{
       })
     },
     delCartItem({ commit }, data) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {c
         delCartItem(data).then(res => {
-          commit('DEL_CARTITEM', data.cart_detail[0]['cart_course_id'])
+          commit('DEL_CARTITEM', data.cartDetail[0]['cartCourseId'])
           resolve(res)
         }).catch(err => {
           reject(err)

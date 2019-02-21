@@ -14,11 +14,11 @@
                         <el-col :span="14">
                             <el-row v-for="(v,k) in items.sub_order" :key="k" class="orders-history-lab">
                                 <el-col :span="6">
-                                    <img class="orders-history-img" :src="v.course_cover_address" alt="" />
+                                    <img class="orders-history-img" :src="v.courseCoverAddress" alt="" />
                                 </el-col>
-                                <el-col :span="8"><router-link :to="'detail/'+v.course_id" class="course-link">{{v.course_title}}</router-link></el-col>
-                                <el-col :span="5">{{v.course_author}}</el-col>
-                                <el-col :span="5">{{v.course_price}}</el-col>
+                                <el-col :span="8"><router-link :to="'detail/'+v.courseId" class="course-link">{{v.courseTitle}}</router-link></el-col>
+                                <el-col :span="5">{{v.courseAuthor}}</el-col>
+                                <el-col :span="5">{{v.coursePrice}}</el-col>
                             </el-row>
                         </el-col>
                         <el-col :span="10">

@@ -66,14 +66,14 @@
   export default {
     created() {},
     mounted() {
-      if (Object.keys(this.$route.query).length !== 0 && this.$route.query.course_id !== undefined) {
-        this.$store.dispatch('getLessonsList', { course_id: this.$route.query.course_id }).then((res) => {
+      if (Object.keys(this.$route.query).length !== 0 && this.$route.query.courseId !== undefined) {
+        this.$store.dispatch('getLessonsList', { courseId: this.$route.query.courseId }).then((res) => {
           for (const item of res) {
-            if (item.lesson_is_chapter_head === '0') {
+            if (item.lessonIsChapterHead === '0') {
               this.source.push({
                 name: item.lesson_title,
-                lessonId: item.lesson_id,
-                courseId: item.lesson_course_id,
+                lessonId: item.lessonId,
+                courseId: item.lesson_courseId,
                 description: '',
                 duration: '',
                 // sources: [{ src: 'http://ozg76yopg.bkt.clouddn.com/error', type: 'video/mp4' }],
@@ -83,13 +83,13 @@
                 },
                 thumbnail: false
               })
-              if (item.lesson_id === this.$route.query.lesson_id) {
+              if (item.lessonId === this.$route.query.lessonId) {
                 this.$emit('lessonInfo', item)
               }
             }
           }
-          if (this.$route.query.lesson_id !== undefined) {
-            this.itemSelected = this.$route.query.lesson_id
+          if (this.$route.query.lessonId !== undefined) {
+            this.itemSelected = this.$route.query.lessonId
             for (const i in this.source) {
               if (this.source[i]['lessonId'] === this.itemSelected) {
                 this.changeVideo(this.source[i], i)
@@ -207,7 +207,7 @@
         this.scrollLocation = (parseInt(this.scrollSize.height * 0.12) + 20) * i
       },
       relocate(item) {
-        this.$router.push({ path: '/play', query: { 'course_id': item.courseId, 'lesson_id': item.lessonId }})
+        this.$router.push({ path: '/play', query: { 'courseId': item.courseId, 'lessonId': item.lessonId }})
       }
     },
     watch: {

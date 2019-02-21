@@ -144,7 +144,7 @@
     created() {
       this.summary = this.summary.map((item, i) => {
         item.courseTime = dateFormat(item.courseTime, 'yyyy-MM-dd')
-        if (parseFloat(item.coursePrice).toFixed(2) === '0.00') item.course_price = '免费'
+        if (parseFloat(item.coursePrice).toFixed(2) === '0.00') item.coursePrice = '免费'
         return item
       })
     },

@@ -15,19 +15,19 @@
                         <el-col :span="14">
                             <el-row v-for="(v, k) in items.sub_order" :key="k" class="orders-history-lab">
                                 <el-col :span="6">
-                                    <img class="orders-history-img" :src="v.course_cover_address" alt="" />
+                                    <img class="orders-history-img" :src="v.courseCoverAddress" alt="" />
                                 </el-col>
-                                <!--<el-col :span="8"><router-link :to="'detail/'+v.course_id" class="course-link">{{v.course_title}}</router-link></el-col>-->
-                                <el-col :span="8"><span @click="jumpTo(v.course_id)">{{v.course_title}}</span></el-col>
-                                <el-col :span="5">{{v.course_author}}</el-col>
-                                <el-col :span="5">{{v.course_price}}</el-col>
+                                <!--<el-col :span="8"><router-link :to="'detail/'+v.courseId" class="course-link">{{v.courseTitle}}</router-link></el-col>-->
+                                <el-col :span="8"><span @click="jumpTo(v.courseId)">{{v.courseTitle}}</span></el-col>
+                                <el-col :span="5">{{v.courseAuthor}}</el-col>
+                                <el-col :span="5">{{v.coursePrice}}</el-col>
                             </el-row>
                         </el-col>
                         <el-col :span="10">
                             <el-row class="orders-history-lab">
                                 <el-col :span="8">
                                     <!--<span class="origin-price">{{items.order_discount!=='0'?(parseFloat(items.order_discount)+parseFloat(items.order_price)).toString().currency():''}}</span>-->
-                                    <span class="origin-price">{{items.course_price}}</span>
+                                    <span class="origin-price">{{items.coursePrice}}</span>
                                     <span class="order-price">{{items.order_price}}</span>
                                 </el-col>
                                 <el-col :span="8" v-if="items.order_payment==0">等待支付</el-col>
