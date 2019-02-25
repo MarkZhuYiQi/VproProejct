@@ -380,7 +380,7 @@
           'cartAddTime': Math.ceil(((new Date()).getTime()) / 1000),
           'cartIsCookie': null
         }
-        if (this.token !== 'undefined' && this.token !== null) {
+        if (this.token !== undefined && this.token !== null) {
           // 有token记录，用户登录过
           if (verifyTokenExpiration(this.token)) {
             // token未过期，直接发送给后台，加入购物车
@@ -391,6 +391,7 @@
               // 后台自动判断是否有购物车，没有购物车自动创建
               cartDetail.cartParentId = this.cartInfo.cartId
               // 判断购物车是否有这个商品
+              console.log(this.cartInfo.cartDetail)
               if (!this.courseIsExisted(this.cartInfo.cartDetail)) {
                 // 没有就去添加，把cartDetail发给后台
                 this.$store.dispatch('addToCart', cartDetail)
