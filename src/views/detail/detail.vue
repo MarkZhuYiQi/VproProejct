@@ -29,8 +29,8 @@
                             <!--<span>{{lessonDetail.detail.courseScore}}</span>-->
                         </div>
                         <div>
-                            <span class="main-price">{{ parseInt(this.course.coursePrice) > 0 ? currency(this.course.coursePrice) : '免费' }}</span>
-                            <span class="activity-price" v-if="parseFloat(this.course.courseDiscountPrice).toFixed(2)!=='-1.00'">{{ currency(this.course.courseDiscountPrice) }}</span>
+                            <span class="main-price">{{ parseInt(this.course.coursePrice) > 0 ? this.course.coursePrice : '免费' }}</span>
+                            <span class="activity-price" v-if="parseFloat(this.course.courseDiscountPrice).toFixed(2)!=='-1.00'">{{ this.course.courseDiscountPrice }}</span>
                         </div>
                         <div class="main-adv">现在注册即送优惠券</div>
                         <div class="clearfix"></div>
@@ -288,7 +288,6 @@
   import { mapGetters } from 'vuex'
   import { genNonDuplicateID } from '@/utils/index'
   import { verifyTokenExpiration, getCookie, setCookie } from '@/utils/auth'
-  import { currency } from '@/utils'
   export default{
     mounted() {
       this.$store.dispatch('loadCourse', this.$route.params.courseId).then((res) => {
@@ -356,11 +355,10 @@
         }
       },
       initCart() {
-        if (this.token !== 'undefined' && this.token !== null) {
+        if (this.token !== undefined && this.token !== null) {
           // 有token记录，用户登录过
           if (verifyTokenExpiration(this.token)) {
             this.$store.dispatch('loadCart', { 'cartUserId': this.authId }).then(() => {
-
             })
           }
         }
@@ -376,6 +374,12 @@
        *
        */
       addToCart() {
+        const cartDetail = {
+          'cartCourseId': this.$route.params.courseId,
+          'cartParentId': null,
+          'cartAddTime': Math.ceil(((new Date()).getTime()) / 1000),
+          'cartIsCookie': null
+        }
         if (this.token !== 'undefined' && this.token !== null) {
           // 有token记录，用户登录过
           if (verifyTokenExpiration(this.token)) {
@@ -384,20 +388,12 @@
               'cartUserId': this.authId
             }
             this.$store.dispatch('loadCart', cartRef).then(() => {
-              // 获得购物车信息，如果cartId为-1说明没有购物车信息，需要下次创建；否则说明已经有购物车条目了。
-              const cartId = this.cartInfo.cartId === -1 ? genNonDuplicateID() : this.cartInfo.cartId
-              // 购物车用户id，购物车id，购物车是否存在，购物车详细信息
-              const cartInfo = {
-                'cartUserId': this.authId,
-                cartId,
-                'cartIsExisted': this.cartInfo.cartId === -1 ? 0 : 1,
-                'cartDetail': []
-              }
+              // 后台自动判断是否有购物车，没有购物车自动创建
+              cartDetail.cartParentId = this.cartInfo.cartId
               // 判断购物车是否有这个商品
-              if (!this.courseIsExisted(this.cartInfo.cartInfo)) {
-                cartInfo.cartDetail.push({ cartCourseId: this.lessonDetail.detail.courseId, cartParentId: cartId })
-                // 没有就去添加
-                this.$store.dispatch('addToCart', cartInfo)
+              if (!this.courseIsExisted(this.cartInfo.cartDetail)) {
+                // 没有就去添加，把cartDetail发给后台
+                this.$store.dispatch('addToCart', cartDetail)
               }
             })
           } else {
@@ -417,17 +413,17 @@
           } else {
             cookieCart = JSON.parse(cookieCart)
           }
+          cartDetail.cartParentId = cookieCart.cartId
+          cartDetail.cartIsCookie = 1
           // 如果购物车中有课程，就去判断课程是否已经存在
           if (cookieCart.cartDetail.length !== 0) {
-            let cartDetail = []
-            cartDetail = cookieCart.cartDetail
             // 筛查课程是否存在，不存在才插入， 这里的逻辑要改，复杂化了
-            if (!this.courseIsExisted(cartDetail)) {
-              cookieCart.cartDetail.push({ cartCourseId: this.lessonDetail.detail.courseId, cartParentId: cookieCart.cartId, cartIsCookie: 1 })
+            if (!this.courseIsExisted(cookieCart.cartDetail)) {
+              cookieCart.cartDetail.push(cartDetail)
             }
           } else {
             // 没有课程就直接加
-            cookieCart.cartDetail.push({ cartCourseId: this.lessonDetail.detail.courseId, cartParentId: cookieCart.cartId, cartIsCookie: 1 })
+            cookieCart.cartDetail.push(cartDetail)
           }
           setCookie('cart', JSON.stringify(cookieCart), 30)
           console.log(cookieCart)
@@ -441,6 +437,7 @@
        * @returns {boolean}
        */
       courseIsExisted(cart) {
+        if (cart.length === 0) return false
         for (const c of cart) {
           if (c.cartCourseId === this.lessonDetail.detail.courseId) {
             this.$notify.error({

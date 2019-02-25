@@ -4,7 +4,9 @@ import Vue from 'vue'
 export default{
   state: {
     cartInfo: {
-      cartInfo: []
+      cartId: '',
+      cartUserId: '',
+      cartDetail: []
     },
     orderInfo: []
   },
@@ -16,7 +18,7 @@ export default{
       state['orderInfo'] = data
     },
     DEL_CARTITEM(state, courseId) {
-      const cartInfo = state.cartInfo.cartInfo
+      const cartInfo = state.cartInfo.cartDetail
       for (const i in cartInfo) {
         if (cartInfo[i]['cartCourseId'] === courseId) {
           Vue.delete(cartInfo, i)
@@ -58,7 +60,7 @@ export default{
       })
     },
     delCartItem({ commit }, data) {
-      return new Promise((resolve, reject) => {c
+      return new Promise((resolve, reject) => {
         delCartItem(data).then(res => {
           commit('DEL_CARTITEM', data.cartDetail[0]['cartCourseId'])
           resolve(res)

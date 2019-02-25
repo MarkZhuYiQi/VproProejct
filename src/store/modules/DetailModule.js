@@ -1,6 +1,7 @@
 import { getLessonDetail, getLessonsList, getCourse } from './../../api/detail'
 import { Notification, Loading } from 'element-ui'
 import { getCrumb } from '../../api/category'
+import { currency } from '@/utils'
 export default{
   state: {
     lessonDetail: [],
@@ -69,6 +70,9 @@ export default{
     loadCourse({ commit }, courseId) {
       return new Promise((resolve, reject) => {
         getCourse(courseId).then(res => {
+          res.data.coursePrice = currency(res.data.coursePrice.toString())
+          res.data.courseDiscountPrice = currency(res.data.courseDiscountPrice.toString())
+          console.log(res.data)
           commit('SET_COURSE', res.data)
           resolve(res.data)
         }).catch(err => {

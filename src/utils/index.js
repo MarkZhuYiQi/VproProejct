@@ -122,6 +122,6 @@ export function currency(str) {
     })
     return res
   } else {
-    return this + '.00'
+    return str + '.00'
   }
 }
