@@ -34,23 +34,23 @@
               <div v-for="item in cartItemDetail" :key="item.cartCourseId" class="text item">
                 <el-row>
                     <el-col :span="1">
-                        <span><input type="checkbox" @click="checkOne(item.courseId)" :checked="check.cartIds.indexOf(item.cartCourseId)>=0" class="cart-checkbox"></span>
+                        <span><input type="checkbox" @click="checkOne(item.courseId)" :checked="check.cartIds.indexOf(item.courseId)>=0" class="cart-checkbox"></span>
                         <!--<el-checkbox :checked="check.cartIds.indexOf(item.cartCourseId)>=0" @change="test" @click="checkOne(item.cartCourseId)"></el-checkbox>-->
                     </el-col>
                     <el-col :span="5">
-                        <div><img class="thumbnail_cart" :src="item.cartCourseCoverAddress" alt="" @click="jumpToCourse(item.cartCourseId)"></div>
+                        <div><img class="thumbnail_cart" :src="cloudRoot + '/' + item.vproCoursesCover.courseCoverKey" alt="" @click="jumpToCourse(item.courseId)"></div>
                     </el-col>
                     <el-col :span="9">
-                        <span style="cursor: pointer" @click="jumpToCourse(item.cartCourseId)">{{item.cartCourseTitle}}</span>
+                        <span style="cursor: pointer" @click="jumpToCourse(item.courseId)">{{item.courseTitle}}</span>
                     </el-col>
                     <el-col :span="4">
                         永久有效
                     </el-col>
                     <el-col :span="3">
-                        {{item.cartCoursePrice}}
+                        {{item.coursePrice}}
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="text" @click="deleteCartItem(item.cartCourseId)">delete</el-button>
+                        <el-button type="text" @click="deleteCartItem(item.courseId)">delete</el-button>
                     </el-col>
                 </el-row>
                 <hr class="cart-divide">
@@ -302,7 +302,7 @@
       }
     },
     computed: {
-      ...mapGetters(['cartInfo', 'orderInfo', 'authId', 'token', 'cartItemDetail'])
+      ...mapGetters(['cartInfo', 'orderInfo', 'authId', 'token', 'cartItemDetail', 'cloudRoot'])
     }
   }
 </script>
