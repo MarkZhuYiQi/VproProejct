@@ -10,6 +10,7 @@ const getters = {
   // cartModule
   cartInfo: state => state.cart.cartInfo,
   orderInfo: state => state.cart.orderInfo,
+  cartItemDetail: state => state.cart.cartItemDetail,
   // categoryModule
   coursesList: state => state.category.coursesList,
   pagination: state => parseInt(state.category.pagination),

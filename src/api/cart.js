@@ -1,6 +1,6 @@
 import request from './../utils/request'
 
-export function loadCart(data) {
+export function loadCart() {
   return request({
     'url': '/cart',
     'method': 'get'
@@ -38,5 +38,12 @@ export function mergeCart(cookieCartId) {
   return request({
     'url': '/cart/merge/' + cookieCartId,
     'method': 'get'
+  })
+}
+export function getCartItemDetail(coursesId) {
+  return request({
+    'url': '/cart/detail',
+    'method': 'post',
+    'data': coursesId
   })
 }

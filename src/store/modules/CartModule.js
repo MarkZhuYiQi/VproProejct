@@ -1,4 +1,4 @@
-import { loadCart, addCart, checkCourses, delCartItem } from '@/api/cart'
+import { loadCart, addItemToUserCart, addItemToCookieCart, checkCourses, delCartItem, getCartItemDetail } from '@/api/cart'
 import { Message } from 'element-ui'
 import Vue from 'vue'
 export default{
@@ -8,10 +8,12 @@ export default{
       cartUserId: '',
       cartDetail: []
     },
+    cartItemDetail: [],
     orderInfo: []
   },
   mutations: {
     SET_CARTINFO(state, data) {
+      if (state.cartInfo.cartDetail == null) data.cartInfo.cartDetail = []
       state['cartInfo'] = data
     },
     SET_ORDERINFO(state, data) {
@@ -24,12 +26,15 @@ export default{
           Vue.delete(cartInfo, i)
         }
       }
+    },
+    SET_CART_ITEM_DETAIL(state, data) {
+      state['cartItemDetail'] = data
     }
   },
   actions: {
-    loadCart(context, data) {
+    loadCart(context) {
       return new Promise((resolve, reject) => {
-        loadCart(data).then(res => {
+        loadCart().then(res => {
           context.commit('SET_CARTINFO', res.data)
           resolve(res.data)
         }).catch(err => {
@@ -49,7 +54,19 @@ export default{
     },
     addToCart(context, data) {
       return new Promise((resolve, reject) => {
-        addCart(data).then((res) => {
+        addItemToUserCart(data).then((res) => {
+          Message({
+            message: '成功加入购物车！',
+            type: 'success'
+          })
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    addItemToCookieCart(context, data) {
+      return new Promise((resolve, reject) => {
+        addItemToCookieCart(data).then((res) => {
           Message({
             message: '成功加入购物车！',
             type: 'success'
@@ -63,6 +80,16 @@ export default{
       return new Promise((resolve, reject) => {
         delCartItem(data).then(res => {
           commit('DEL_CARTITEM', data.cartDetail[0]['cartCourseId'])
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    getCartItemDetail({ commit }, data) {
+      return new Promise((resolve, reject) => {
+        getCartItemDetail(data).then(res => {
+          commit('SET_CART_ITEM_DETAIL', res.data)
           resolve(res)
         }).catch(err => {
           reject(err)

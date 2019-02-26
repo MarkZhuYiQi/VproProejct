@@ -2,7 +2,7 @@
     <div class="cart-container">
         <div class="cart-title">
             <span>我的购物车</span>
-            <span>共{{cartInfo.cartInfo.length}}门课程</span>
+            <span>共{{cartInfo.cartDetail === null ? 0 : cartInfo.cartDetail.length }}门课程</span>
         </div>
         <el-card class="box-card">
             <div class="clearfix order-title">
@@ -26,15 +26,15 @@
                 </el-row>
             </div>
         </el-card>
-        <el-card class="box-card" v-if="cartInfo.cartInfo.length">
+        <el-card class="box-card" v-if="cartInfo.cartDetail.length">
             <div slot="header" class="clearfix">
                 <!--<el-checkbox v-model="check.checkAll" @change="checkAll">网站自营</el-checkbox>-->
                 <span><input type="checkbox" @click="checkAll" v-model="check.checkAll" class="cart-checkbox" autocomplate="off">网站自营</span>
             </div>
-              <div v-for="item in cartInfo.cartInfo" :key="item.cartCourseId" class="text item">
+              <div v-for="item in cartItemDetail" :key="item.cartCourseId" class="text item">
                 <el-row>
                     <el-col :span="1">
-                        <span><input type="checkbox" @click="checkOne(item.cartCourseId)" :checked="check.cartIds.indexOf(item.cartCourseId)>=0" class="cart-checkbox"></span>
+                        <span><input type="checkbox" @click="checkOne(item.courseId)" :checked="check.cartIds.indexOf(item.cartCourseId)>=0" class="cart-checkbox"></span>
                         <!--<el-checkbox :checked="check.cartIds.indexOf(item.cartCourseId)>=0" @change="test" @click="checkOne(item.cartCourseId)"></el-checkbox>-->
                     </el-col>
                     <el-col :span="5">
@@ -56,7 +56,7 @@
                 <hr class="cart-divide">
             </div>
         </el-card>
-        <div style="background-color: #FFFFFF; color: #cccccc; text-align: center; margin: 10px 0" v-if="!cartInfo.cartInfo.length">
+        <div style="background-color: #FFFFFF; color: #cccccc; text-align: center; margin: 10px 0" v-if="!cartInfo.cartDetail.length">
             <span style="padding: 80px; display: block">空空如也~</span>
         </div>
         <div class="cart-bottom">
@@ -67,11 +67,11 @@
                 </el-col>
                 <el-col :span="15">
                     <div class="total-price">
-                        <span class="price-desc">合计：</span><span class="price-num">{{summaryPrice}}</span>
+                        <span class="price-desc">合计：</span><span class="price-num">{{ summaryPrice }}</span>
                     </div>
                 </el-col>
                 <el-col :span="4">
-                    <el-button size="large" :class="{'disable_button':!check.cartIds.length,'put_order':check.cartIds.length}" :disabled="!check.cartIds.length" type="danger" @click="placeOrder()" :loading="check.orderCheck">确认下单</el-button>
+                    <el-button size="large" :class="{ 'disable_button': !check.cartIds.length, 'put_order': check.cartIds.length }" :disabled="!check.cartIds.length" type="danger" @click="placeOrder()" :loading="check.orderCheck">确认下单</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -179,14 +179,14 @@
       if (this.token !== undefined && this.token !== null) {
         if (verifyTokenExpiration(this.token)) {
           // 通过token检测，确认登陆
-          // 购物车ID即为用户id
-          const cartRef = {
-            'cartUserId': this.authId
-          }
-          this.$store.dispatch('loadCart', cartRef).then(() => {
-            if (this.cartInfo.length > 0) {
-              this.cartParentId = this.cartInfo[0]['cartParentId']
-              addLocalData('cartParentId', this.cartParentId)
+          this.$store.dispatch('loadCart').then(() => {
+            this.cartParentId = this.cartInfo['cartId']
+            addLocalData('cartParentId', this.cartParentId)
+            if (this.cartInfo.cartDetail.length > 0) {
+              const coursesId = this.cartInfo.cartDetail.map(item => {
+                return item.cartCourseId
+              })
+              this.$store.dispatch('getCartItemDetail', coursesId)
             }
           })
         } else {
@@ -195,11 +195,11 @@
         }
       } else if (getCookie('cart') !== '') {
         // cookie中是否存储了名为cart的信息
-        const cookieCart = JSON.parse(getCookie('cart'))
-        const cartRef = {
-          'cartCookieId': cookieCart.cartId
-        }
-        this.$store.dispatch('loadCart', cartRef).then(() => {
+        // const cookieCart = JSON.parse(getCookie('cart'))
+        // const cartRef = {
+        //   'cartCookieId': cookieCart.cartId
+        // }
+        this.$store.dispatch('loadCart').then(() => {
           console.log(this.cartInfo)
         })
       }
@@ -219,7 +219,7 @@
       checkAll() {
         if (!this.check.checkAll) {
           this.check.cartIds = []
-          this.cartInfo.cartInfo.map(item => {
+          this.cartInfo.cartDetail.map(item => {
             this.check.cartIds.push(item.cartCourseId)
           })
         } else {
@@ -229,7 +229,7 @@
       },
       priceSummary() {
         let price = 0
-        this.cartInfo.cartInfo.filter((item) => {
+        this.cartInfo.cartDetail.filter((item) => {
           for (const i of this.check.cartIds) {
             if (i === item.cartCourseId) return true
           }
@@ -302,7 +302,7 @@
       }
     },
     computed: {
-      ...mapGetters(['cartInfo', 'orderInfo', 'authId', 'token'])
+      ...mapGetters(['cartInfo', 'orderInfo', 'authId', 'token', 'cartItemDetail'])
     }
   }
 </script>

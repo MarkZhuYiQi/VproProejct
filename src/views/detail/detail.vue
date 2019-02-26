@@ -384,12 +384,10 @@
           // 有token记录，用户登录过
           if (verifyTokenExpiration(this.token)) {
             // token未过期，直接发送给后台，加入购物车
-            const cartRef = {
-              'cartUserId': this.authId
-            }
-            this.$store.dispatch('loadCart', cartRef).then(() => {
+            this.$store.dispatch('loadCart').then(() => {
               // 后台自动判断是否有购物车，没有购物车自动创建
               cartDetail.cartParentId = this.cartInfo.cartId
+              cartDetail.cartIsCookie = false
               // 判断购物车是否有这个商品
               console.log(this.cartInfo.cartDetail)
               if (!this.courseIsExisted(this.cartInfo.cartDetail)) {
@@ -428,7 +426,7 @@
           }
           setCookie('cart', JSON.stringify(cookieCart), 30)
           console.log(cookieCart)
-          this.$store.dispatch('addToCart', cookieCart)
+          this.$store.dispatch('addItemToCookieCart', cookieCart)
         }
       },
       /**
@@ -438,9 +436,9 @@
        * @returns {boolean}
        */
       courseIsExisted(cart) {
-        if (cart.length === 0) return false
+        if (cart === null || cart.length === 0) return false
         for (const c of cart) {
-          if (c.cartCourseId === this.lessonDetail.detail.courseId) {
+          if (c.cartCourseId === this.$route.params.courseId) {
             this.$notify.error({
               title: '错误',
               message: '购物车中已存在该商品'
