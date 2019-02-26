@@ -26,7 +26,7 @@
                 </el-row>
             </div>
         </el-card>
-        <el-card class="box-card" v-if="cartInfo.cartDetail.length">
+        <el-card class="box-card" v-if="cartInfo.cartDetail.length > 0">
             <div slot="header" class="clearfix">
                 <!--<el-checkbox v-model="check.checkAll" @change="checkAll">网站自营</el-checkbox>-->
                 <span><input type="checkbox" @click="checkAll" v-model="check.checkAll" class="cart-checkbox" autocomplate="off">网站自营</span>
@@ -56,8 +56,14 @@
                 <hr class="cart-divide">
             </div>
         </el-card>
-        <div style="background-color: #FFFFFF; color: #cccccc; text-align: center; margin: 10px 0" v-if="!cartInfo.cartDetail.length">
-            <span style="padding: 80px; display: block">空空如也~</span>
+        <div style="background-color: #FFFFFF; color: #cccccc; text-align: center; margin: 10px 0" v-if="cartInfo.cartDetail.length === 0">
+            <span v-if="cartInfo.cartDetail.length == 0 && cartInfo.cartId !== ''" style="padding: 80px; display: block">空空如也~</span>
+            <span v-if="cartItemDetail.length === 0">
+                <img
+                    src="/static/loading-bubbles.svg"
+                    alt=""
+                    style="width: 50px; height: 50px; margin: 20px auto;">
+            </span>
         </div>
         <div class="cart-bottom">
             <el-row :gutter="20">
@@ -172,9 +178,12 @@
 </style>
 <script>
   import { mapGetters } from 'vuex'
-  import { verifyTokenExpiration, addLocalData, getCookie } from '@/utils/auth'
+  import { verifyTokenExpiration, addLocalData, getLocalData, getCookie } from '@/utils/auth'
 
   export default{
+    /**
+     * cookieCart: { cartId: xxx, cartDetail: [{cartCourseId: xx, cartParentId: xx, cartAddTime: xx, cartIsCookie: x}, {...}, ...]}
+     */
     mounted() {
       if (this.token !== undefined && this.token !== null) {
         if (verifyTokenExpiration(this.token)) {
@@ -195,13 +204,15 @@
         }
       } else if (getCookie('cart') !== '') {
         // cookie中是否存储了名为cart的信息
-        // const cookieCart = JSON.parse(getCookie('cart'))
-        // const cartRef = {
-        //   'cartCookieId': cookieCart.cartId
-        // }
-        this.$store.dispatch('loadCart').then(() => {
-          console.log(this.cartInfo)
-        })
+        const cookieCart = JSON.parse(getCookie('cart'))
+        if (cookieCart.cartDetail.length > 0) {
+          const coursesId = cookieCart.cartDetail.map(item => {
+            return item.cartCourseId
+          })
+          this.$store.dispatch('getCartItemDetail', coursesId).then(() => {
+            console.log(this.cartInfo)
+          })
+        }
       }
     },
     data: () => {
@@ -229,13 +240,13 @@
       },
       priceSummary() {
         let price = 0
-        this.cartInfo.cartDetail.filter((item) => {
+        this.cartItemDetail.filter((item) => {
           for (const i of this.check.cartIds) {
-            if (i === item.cartCourseId) return true
+            if (i === item.courseId) return true
           }
           return false
         }).map(item => {
-          price = price + parseFloat(item.cartCoursePrice)
+          price = price + parseFloat(item.coursePrice)
         })
         this.summaryPrice = price.toFixed(2)
       },
@@ -254,24 +265,13 @@
         this.priceSummary()
       },
       deleteCartItem(courseId) {
-        let originCart = {}
-        let cart = {}
-        if (this.token === null || this.token === undefined) {
-          cart = JSON.parse(getCookie('cart'))
-          originCart = cart.cartDetail
-          cart['is_login'] = false
-        } else {
-          originCart = this.cartInfo
-          cart['is_login'] = true
-          cart['cartUserId'] = this.authId
+        const cartDetail = {
+          cartCourseId: courseId,
+          cartParentId: getLocalData('cartParentId'),
+          cartIsCookie: !((this.token) && verifyTokenExpiration(this.token))
         }
-        cart.cartDetail = originCart.cartInfo.filter(item => {
-          if (item.cartCourseId === courseId) {
-            return true
-          }
-          return false
+        this.$store.dispatch('delCartItem', cartDetail).then(() => {
         })
-        this.$store.dispatch('delCartItem', cart)
       },
       jumpToCourse(courseId) {
         window.open('http://' + window.location.host + '/#/detail/' + courseId)

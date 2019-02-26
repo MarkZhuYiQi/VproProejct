@@ -400,6 +400,9 @@
             this.$root.$emit('showLogin')
           }
         } else {
+          /**
+           * cookieCart: { cartId: xxx, cartDetail: [{cartCourseId: xx, cartParentId: xx, cartAddTime: xx, cartIsCookie: x}, {...}, ...]}
+           */
           // 没有token，没有用户登陆过，直接生成cookie购物车，本地购物车
           let cookieCart = getCookie('cart')
           console.log(cookieCart)

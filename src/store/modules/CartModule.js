@@ -1,4 +1,5 @@
 import { loadCart, addItemToUserCart, addItemToCookieCart, checkCourses, delCartItem, getCartItemDetail } from '@/api/cart'
+import { setCookie, getCookie } from '@/utils/auth'
 import { Message } from 'element-ui'
 import Vue from 'vue'
 export default{
@@ -13,7 +14,7 @@ export default{
   },
   mutations: {
     SET_CARTINFO(state, data) {
-      if (state.cartInfo.cartDetail == null) data.cartInfo.cartDetail = []
+      if (state.cartInfo.cartDetail === null) data.cartInfo.cartDetail = []
       state['cartInfo'] = data
     },
     SET_ORDERINFO(state, data) {
@@ -21,11 +22,19 @@ export default{
     },
     DEL_CARTITEM(state, courseId) {
       const cartInfo = state.cartInfo.cartDetail
-      for (const i in cartInfo) {
-        if (cartInfo[i]['cartCourseId'] === courseId) {
-          Vue.delete(cartInfo, i)
+      const cartItemDetail = state.cartItemDetail
+      for (const i in cartItemDetail) {
+        if (cartItemDetail[i]['courseId'] === courseId) {
+          Vue.delete(cartItemDetail, i)
         }
       }
+      for (const j in cartInfo) {
+        if (cartInfo[j]['cartCourseId'] === courseId) {
+          Vue.delete(cartInfo, j)
+        }
+      }
+      console.log(cartInfo)
+      console.log(cartItemDetail)
     },
     SET_CART_ITEM_DETAIL(state, data) {
       state['cartItemDetail'] = data
@@ -76,10 +85,18 @@ export default{
         })
       })
     },
-    delCartItem({ commit }, data) {
+    delCartItem({ commit }, cartDetail) {
       return new Promise((resolve, reject) => {
-        delCartItem(data).then(res => {
-          commit('DEL_CARTITEM', data.cartDetail[0]['cartCourseId'])
+        delCartItem(cartDetail).then(res => {
+          // commit('DEL_CARTITEM', data.cartDetail[0]['cartCourseId'])
+          if (cartDetail.cartIsCookie) {
+            const cookieCart = JSON.parse(getCookie('cart'))
+            cookieCart.cartDetail.map(item => {
+              if (item.cartCourseId !== cartDetail.cartCourseId) return item
+            })
+            setCookie('cart', JSON.stringify(cookieCart), 30)
+          }
+          commit('DEL_CARTITEM', cartDetail.cartCourseId)
           resolve(res)
         }).catch(err => {
           reject(err)
