@@ -26,7 +26,7 @@
                 </el-row>
             </div>
         </el-card>
-        <el-card class="box-card" v-if="cartInfo.cartDetail.length > 0">
+        <el-card class="box-card" v-if="cartInfo.cartDetail.length > 0" v-loading="!cartItemDetail.length">
             <div slot="header" class="clearfix">
                 <!--<el-checkbox v-model="check.checkAll" @change="checkAll">网站自营</el-checkbox>-->
                 <span><input type="checkbox" @click="checkAll" v-model="check.checkAll" class="cart-checkbox" autocomplate="off">网站自营</span>
@@ -278,27 +278,33 @@
       },
       placeOrder() {
         if (this.check.cartIds.length > 0) {
-          this.$store.dispatch('checkCourses', { orderCourseIds: this.check.cartIds }).then(() => {
+          this.$store.dispatch('checkCourses', this.check.cartIds).then((coursesId) => {
+            console.log(coursesId)
             const checkOrder = {
               isChanged: false,
               changedId: []
             }
-            // 提交订单前，检查订单商品，如果商品不存在了，那么直接删去
-            this.orderInfo.map((item, i) => {
-              if (this.check.cartIds.indexOf(item.courseId.toString()) < 0) {
-                this.check.cartIds.splice(i, 1)
-                checkOrder.isChanged = true
-                checkOrder.changedId.push(item.courseId)
-              }
+            // 提交订单前，检查订单商品，如果商品不在后台返回的courseId数组中，说明这个商品有问题
+            this.check.cartIds.map(courseId => {
+              if (coursesId.indexOf(courseId) !== -1) return courseId
             })
+            checkOrder.isChanged = coursesId.length < this.check.cartIds.length
+            if (checkOrder.isChanged) {
+              this.reminder()
+              return
+            }
             // order如果没有更改，进入下单界面
             if (!checkOrder.isChanged) {
               this.check.orderCheck = false
-              addLocalData('cartIds', this.check.cartIds)
               this.$router.push({ path: '/settle' })
             }
           })
         }
+      },
+      reminder() {
+        this.$alert('您的购物车中有商品暂时无法购买，请确认后再提交', '提示', {
+          confirmButtonText: '确定'
+        })
       }
     },
     computed: {

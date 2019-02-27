@@ -22,7 +22,7 @@ export function addItemToCookieCart(data) {
 }
 export function checkCourses(data) {
   return request({
-    'url': '/api/product/checkcourses',
+    'url': '/course/check',
     'method': 'post',
     data
   })

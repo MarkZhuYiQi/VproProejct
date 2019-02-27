@@ -10,6 +10,7 @@ export default{
       cartDetail: []
     },
     cartItemDetail: [],
+    // 目前是存放所有商品的id
     orderInfo: []
   },
   mutations: {
@@ -104,11 +105,16 @@ export default{
       })
     },
     getCartItemDetail({ commit }, data) {
+      // const loading = Loading.service({
+      //   text: '正在加载中'
+      // })
       return new Promise((resolve, reject) => {
         getCartItemDetail(data).then(res => {
+          // loading.close()
           commit('SET_CART_ITEM_DETAIL', res.data)
           resolve(res)
         }).catch(err => {
+          // loading.close()
           reject(err)
         })
       })

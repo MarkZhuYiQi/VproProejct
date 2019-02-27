@@ -23,11 +23,11 @@
                 </el-col>
             </el-row>
             <hr class="bottom-line" />
-            <div class="courseDetail" v-for="item in orderInfo">
+            <div class="courseDetail" v-for="item in cartItemDetail">
                 <el-row :gutter="20">
                     <el-col :span="7">
                         <div>
-                            <img :src="item.courseCoverAddress" alt="" class="courseImage">
+                            <img :src="cloudRoot + '/' + item.vproCoursesCover.courseCoverKey" alt="" class="courseImage">
                         </div>
                     </el-col>
                     <el-col :span="9"><span>{{item.courseTitle}}</span></el-col>
@@ -255,12 +255,10 @@
   export default {
     created() {
       if (this.orderInfo.length !== 0) {
-        const cartIds = checkLocalData('cartIds')
-        if (cartIds) {
-          this.$store.dispatch('checkCourses', { orderCourseIds: cartIds })
-        } else {
-          console.log('购物车过期或为空')
-        }
+        // 获得购物车商品的详情
+        this.$store.dispatch('getCartItemDetail', this.orderInfo).then(() => {
+          console.log(this.cartItemDetail)
+        })
       } else {
         this.$router.push({ path: '/cart' })
       }
@@ -281,6 +279,7 @@
         // 原始课程总价
         coursePrice: 0,
         orderProgress: [],
+        // 提交按钮禁止点击
         btnStatus: false
       }
     },
@@ -322,12 +321,12 @@
             this.$store.dispatch('checkCourses', { orderCourseIds: cartIds }).then(() => {
               console.log('insert')
               const info = {
-                user_id: this.authId,
-                orderCourseIds: JSON.parse(getLocalData('cartIds')),
+                userId: this.authId,
+                coursesId: this.orderInfo,
                 cartParentId: this.cartInfo.cartId,
                 coursePrice: this.coursePrice,
-                order_coupon_discount: this.orderPrice.orderCouponDiscount,
-                order_coupon_selected: this.discountSelected
+                orderCouponDiscount: this.orderPrice.orderCouponDiscount,
+                orderCouponSelected: this.discountSelected
               }
               this.$store.dispatch('putOrder', info).then(res => {
                 this.btnStatus = false
@@ -368,7 +367,7 @@
           console.log(this.coupons)
         }
       },
-      orderInfo: function(to, from) {
+      cartItemDetail: function(to, from) {
         // 计算课程总价
         let price = 0
         to.map(item => {
@@ -378,7 +377,7 @@
       }
     },
     computed: {
-      ...mapGetters(['cartInfo', 'orderInfo', 'authId', 'couponInfo', 'token', 'auth_appid']),
+      ...mapGetters(['cartInfo', 'orderInfo', 'cartItemDetail', 'authId', 'couponInfo', 'token', 'auth_appid', 'cloudRoot']),
       payment() {
         return this.$store.getters.payment
       },
