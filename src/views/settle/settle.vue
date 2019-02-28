@@ -252,6 +252,8 @@
   import { mapGetters } from 'vuex'
   import { checkLocalData, getLocalData } from '@/utils/auth'
   import { deepCopy } from '@/utils/index'
+  import { verifyTokenExpiration } from '@/utils/auth'
+
   export default {
     created() {
       if (this.orderInfo.length !== 0) {
@@ -314,19 +316,17 @@
        */
       putOrder() {
         this.btnStatus = true
-        const cartIds = JSON.parse(getLocalData('cartIds'))
-        if (this.authId && this.token && cartIds.length > 0) {
+        console.log(this.orderInfo)
+        if (verifyTokenExpiration(this.token) && this.orderInfo.length > 0) {
           const w = window.open()
           if (this.orderInfo.length > 0 && this.summaryPrice >= 0) {
-            this.$store.dispatch('checkCourses', { orderCourseIds: cartIds }).then(() => {
+            this.$store.dispatch('checkCourses', this.orderInfo).then(() => {
               console.log('insert')
               const info = {
-                userId: this.authId,
                 coursesId: this.orderInfo,
-                cartParentId: this.cartInfo.cartId,
-                coursePrice: this.coursePrice,
-                orderCouponDiscount: this.orderPrice.orderCouponDiscount,
-                orderCouponSelected: this.discountSelected
+                cartId: this.cartInfo.cartId,
+                orderPrice: this.coursePrice,
+                couponId: null
               }
               this.$store.dispatch('putOrder', info).then(res => {
                 this.btnStatus = false

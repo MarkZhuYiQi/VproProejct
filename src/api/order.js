@@ -8,8 +8,8 @@ export function getCoupon(data) {
 }
 export function checkCourses(data) {
   return request({
-    url: '/api/product/checkcourses',
-    method: 'post',
+    'url': '/course/check',
+    'method': 'post',
     data
   })
 }
@@ -23,7 +23,7 @@ export function getOrders(params) {
 }
 export function putOrder(data) {
   return request({
-    url: '/api/order/put-order',
+    url: '/order',
     method: 'post',
     data
   })
