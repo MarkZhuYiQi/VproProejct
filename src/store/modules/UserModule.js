@@ -142,7 +142,7 @@ export default{
       return new Promise((resolve, reject) => {
         getInfo(state.userObj.token).then(response => {
           const data = response.data
-          const userObj = { authId: data.id, appId: data.name, token: localStorage.getItem('token') }
+          const userObj = { authId: data.authId, appId: data.authAppid, token: localStorage.getItem('token') }
           commit('SET_USER_DATA', { data: userObj })
           commit('SET_LOCALSTORAGE_DATA', { data: userObj })
           resolve(response)

@@ -13,11 +13,11 @@ export function checkCourses(data) {
     data
   })
 }
-export function getOrders(params) {
+export function getOrders(data) {
   return request({
-    url: '/api/order/get-order',
-    method: 'get',
-    params
+    url: '/order/get',
+    method: 'post',
+    data
 
   })
 }

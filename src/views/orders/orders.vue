@@ -60,7 +60,13 @@
     data: () => {
       return {
         orderLabelShow: 'first',
-        loading: false
+        loading: false,
+        orderCriteria: {
+          userId: this.authId,
+          orderPayment: -1,
+          pageNum: 1,
+          pageSize: 5
+        }
       }
     },
     components: {
@@ -81,25 +87,29 @@
       },
       loadOrders() {
         this.loading = true
-        this.$store.dispatch('getOrders', { 'user_id': this.authId }).then(res => {
+        this.orderCriteria.userId = this.authId
+        this.$store.dispatch('getOrders', this.orderCriteria).then(res => {
           this.loading = false
         })
       },
       loadUnpaidOrders() {
         this.loading = true
-        this.$store.dispatch('getOrders', { 'user_id': this.authId, 'status': 0 }).then(res => {
+        this.orderCriteria.orderPayment = 0
+        this.$store.dispatch('getOrders', this.orderCriteria).then(res => {
           this.loading = false
         })
       },
       loadSuccessOrders() {
         this.loading = true
-        this.$store.dispatch('getOrders', { 'user_id': this.authId, 'status': 1 }).then(res => {
+        this.orderCriteria.orderPayment = 1
+        this.$store.dispatch('getOrders', this.orderCriteria).then(res => {
           this.loading = false
         })
       },
       loadErrorOrders() {
         this.loading = true
-        this.$store.dispatch('getOrders', { 'user_id': this.authId, 'status': 2 }).then(res => {
+        this.orderCriteria.orderPayment = 2
+        this.$store.dispatch('getOrders', this.orderCriteria).then(res => {
           this.loading = false
         })
       }

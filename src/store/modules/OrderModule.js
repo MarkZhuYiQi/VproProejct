@@ -2,7 +2,7 @@ import { putOrder, getOrders, getOrderCourses, pay } from '@/api/order'
 import { dateFormat } from '@/utils/index'
 export default{
   state: {
-    orderHistory: {},
+    orderHistory: [],
     ordersCurrentPage: -1,
     ordersCount: 0
   },
@@ -29,18 +29,18 @@ export default{
     getOrders({ commit }, data) {
       return new Promise((resolve, reject) => {
         getOrders(data).then(res => {
-          let orders = res.data.orders
+          let orders = res.data
           if (orders.length !== 0) {
             for (const i in orders) {
-              orders[i]['order_time'] = dateFormat(orders[i]['order_time'], 'yyyy-MM-dd hh:mm:ss')
+              orders[i]['orderTime'] = dateFormat(orders[i]['orderTime'], 'yyyy-MM-dd hh:mm:ss')
             }
           } else {
-            orders = {}
+            orders = []
           }
           // console.log(orders)
           commit('SET_ORDERHISTORY', orders)
           commit('SET_CURRENTPAGE', res.data.currentPage)
-          commit('SET_ORDERSCOUNT', res.data.ordersCount)
+          commit('SET_ORDERSCOUNT', res.data.length)
           resolve(res)
         }).catch(err => {
           reject(err)
@@ -56,7 +56,7 @@ export default{
     },
     clearOrders({ commit }) {
       return new Promise((resolve, reject) => {
-        commit('SET_ORDERHISTORY', {})
+        commit('SET_ORDERHISTORY', [])
         resolve()
       })
     },
