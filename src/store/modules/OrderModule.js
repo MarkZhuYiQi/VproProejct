@@ -29,7 +29,7 @@ export default{
     getOrders({ commit }, data) {
       return new Promise((resolve, reject) => {
         getOrders(data).then(res => {
-          let orders = res.data
+          let orders = res.data.orders
           if (orders.length !== 0) {
             for (const i in orders) {
               orders[i]['orderTime'] = dateFormat(orders[i]['orderTime'], 'yyyy-MM-dd hh:mm:ss')
@@ -39,8 +39,8 @@ export default{
           }
           // console.log(orders)
           commit('SET_ORDERHISTORY', orders)
-          commit('SET_CURRENTPAGE', res.data.currentPage)
-          commit('SET_ORDERSCOUNT', res.data.length)
+          commit('SET_CURRENTPAGE', res.data.pageNum)
+          commit('SET_ORDERSCOUNT', res.data.total)
           resolve(res)
         }).catch(err => {
           reject(err)

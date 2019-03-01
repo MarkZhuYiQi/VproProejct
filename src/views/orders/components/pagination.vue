@@ -38,15 +38,19 @@
     methods: {
       handleCurrentChange(val) {
         this.$store.dispatch('clearOrders').then(() => {
+          const orderCriteria = {
+            userId: this.authId,
+            orderPayment: this.status,
+            pageNum: val,
+            pageSize: 5
+          }
           this.currentPage = val
-          const data = { 'user_id': this.authId, 'p': val }
-          if (this.status !== -1) data.status = this.status
-          this.$store.dispatch('getOrders', data)
+          this.$store.dispatch('getOrders', orderCriteria)
         })
       }
     },
     computed: {
-      ...mapGetters(['auth_id', 'ordersCount', 'ordersCurrentPage'])
+      ...mapGetters(['authId', 'ordersCount', 'ordersCurrentPage'])
     }
   }
 </script>
