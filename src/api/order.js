@@ -6,11 +6,10 @@ export function getCoupon(data) {
     data
   })
 }
-export function checkCourses(data) {
+export function checkCourses(courseId) {
   return request({
-    'url': '/course/check',
-    'method': 'post',
-    data
+    'url': '/order/check',
+    'method': 'get' + courseId
   })
 }
 export function getOrders(data) {

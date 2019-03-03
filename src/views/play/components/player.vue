@@ -34,12 +34,13 @@
   require('videojs-playlist-ui/dist/videojs-playlist-ui.js')
   export default {
     created() {
+      console.log(123)
       if (Object.keys(this.$route.query).length !== 0 && this.$route.query.courseId !== undefined) {
-        this.$store.dispatch('getLessonsList', { courseId: this.$route.query.courseId }).then((res) => {
+        this.$store.dispatch('loadLessonsList', this.$route.query.courseId).then((res) => {
           for (const item of res) {
             if (item.lessonIsChapterHead === '0') {
               this.source.push({
-                name: item.lesson_title,
+                name: item.lessonTitle,
                 description: '',
                 duration: '',
                 sources: [

@@ -39,7 +39,6 @@
   import Rec from './components/rec.vue'
   export default {
     mounted() {
-
     },
     data() {
       return {
@@ -51,7 +50,7 @@
         this.$store.dispatch('loadCourseLesson', { courseId, lessonId }).then()
       },
       loadLessonInfo(obj) {
-        console.log(obj)
+        console.log('loadLessonInfo', obj)
         this.lessonInfo = obj
       }
     },

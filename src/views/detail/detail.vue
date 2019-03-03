@@ -364,7 +364,7 @@
         }
       },
       enterVideo(obj) {
-        window.location.href = 'http://' + window.location.host + '/#/play/?' + 'courseId=' + obj.lesson_courseId + '&' + 'lessonId=' + obj.lessonId
+        window.location.href = 'http://' + window.location.host + '/#/play/?' + 'courseId=' + this.$route.params.courseId + '&' + 'lessonId=' + obj.lessonId
       },
       /**
        * 加入购物车方法：

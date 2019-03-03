@@ -1,5 +1,6 @@
 import { agree, oppose } from './../../api/comment'
-import { getLessonsList, getRecCourses } from './../../api/player'
+import { getRecCourses } from './../../api/player'
+import { getLessonsList } from '@/api/detail'
 export default{
   state: {
     playerInfo: {

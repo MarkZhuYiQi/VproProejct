@@ -67,18 +67,18 @@
     created() {},
     mounted() {
       if (Object.keys(this.$route.query).length !== 0 && this.$route.query.courseId !== undefined) {
-        this.$store.dispatch('getLessonsList', { courseId: this.$route.query.courseId }).then((res) => {
+        this.$store.dispatch('getLessonsList', this.$route.query.courseId).then((res) => {
           for (const item of res) {
             if (item.lessonIsChapterHead === '0') {
               this.source.push({
-                name: item.lesson_title,
+                name: item.lessonTitle,
                 lessonId: item.lessonId,
-                courseId: item.lesson_courseId,
+                courseId: item.lessonCourseId,
                 description: '',
                 duration: '',
                 // sources: [{ src: 'http://ozg76yopg.bkt.clouddn.com/error', type: 'video/mp4' }],
                 sources: {
-                  src: item.video_file_key && item.video_file_isused ? this.cloudRoot + '/' + item.video_file_key : this.cloudRoot + '/error?v=' + Math.floor((Math.random() * 100) + 1),
+                  src: item.videoFileKey && item.videoFileIsused ? this.cloudRoot + '/' + item.videoFileKey : this.cloudRoot + '/error?v=' + Math.floor((Math.random() * 100) + 1),
                   type: 'video/mp4'
                 },
                 thumbnail: false
