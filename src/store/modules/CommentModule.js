@@ -38,6 +38,12 @@ export default{
         })
       })
     },
+    /**
+     * [{ vpro_comment_id: xx, vpro_comment_content: xx, ..., parent: [{}, {}, ...]}]
+     * @param commit
+     * @param data
+     * @returns {Promise<any>}
+     */
     getComment({ commit }, data) {
       return new Promise((resolve, reject) => {
         getComment(data).then(res => {

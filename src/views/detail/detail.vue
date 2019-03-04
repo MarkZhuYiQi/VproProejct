@@ -35,7 +35,7 @@
                         <div class="main-adv">现在注册即送优惠券</div>
                         <div class="clearfix"></div>
                         <div  class="main-btn">
-                            <el-button type="primary" size="large" @click="verifyCourse">立即参加</el-button>
+                            <el-button type="primary" size="large" @click="punchPlayBtn">立即参加</el-button>
                             <el-button type="text" @click="addToCart">加入购物车</el-button>
                         </div>
                         <div class="main-share">
@@ -285,6 +285,7 @@
     }
 </style>
 <script>
+  import { Notification } from 'element-ui'
   import { mapGetters } from 'vuex'
   import { genNonDuplicateID } from '@/utils/index'
   import { verifyTokenExpiration, getCookie, setCookie } from '@/utils/auth'
@@ -363,8 +364,25 @@
           }
         }
       },
+      /**
+       * 进入视频播放
+       */
       enterVideo(obj) {
-        window.location.href = 'http://' + window.location.host + '/#/play/?' + 'courseId=' + this.$route.params.courseId + '&' + 'lessonId=' + obj.lessonId
+        if (parseInt(this.course.coursePrice) > 0) {
+          this.verifyCourse().then(res => {
+            if (!res) {
+              Notification.error({
+                title: '错误',
+                message: '请先购买课程'
+              })
+              return
+            } else {
+              this.videoStart(obj)
+            }
+          })
+        } else {
+          this.videoStart(obj)
+        }
       },
       /**
        * 加入购物车方法：
@@ -455,16 +473,20 @@
         window.open('http://' + window.location.host + '/#/detail/' + courseId)
       },
       verifyCourse() {
-        this.$store.dispatch('getOrderCourses', { userId: this.auth_id }).then(res => {
-          if (res.data.length > 0) {
-            if (res.data.indexOf(this.$route.params.courseId) > -1) {
-              for (const v of this.list[0].lesson) {
-                if (v['lessonIsChapterHead'] === 0) this.enterVideo(v)
-                break
-              }
-              this.$message('还没有发布任何课时哦')
-              return
+        return this.$store.dispatch('checkCourseIfBought', this.$route.params.courseId)
+      },
+      videoStart(obj) {
+        window.location.href = 'http://' + window.location.host + '/#/play/?' + 'courseId=' + this.$route.params.courseId + '&' + 'lessonId=' + obj.lessonId
+      },
+      punchPlayBtn() {
+        this.verifyCourse().then(res => {
+          if (res) {
+            for (const v of this.list[0].lesson) {
+              if (parseInt(v['lessonIsChapterHead']) === 0) this.videoStart(v)
+              break
             }
+            this.$message('还没有发布任何课时哦')
+            return
           }
           // 没有购买就直接提醒是否加入购物车
           this.cartShowed = true

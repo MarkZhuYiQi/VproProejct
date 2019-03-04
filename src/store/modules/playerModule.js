@@ -1,5 +1,6 @@
 import { agree, oppose } from './../../api/comment'
 import { getRecCourses } from './../../api/player'
+import { checkCourseIfBought } from '@/api/order'
 import { getLessonsList } from '@/api/detail'
 export default{
   state: {
@@ -17,6 +18,15 @@ export default{
       return new Promise((resolve, reject) => {
         getLessonsList(data).then(res => {
           commit('SET_LESSONSLIST', res.data)
+          resolve(res.data)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    checkCourseIfBought({ commit }, courseId) {
+      return new Promise((resolve, reject) => {
+        checkCourseIfBought(courseId).then(res => {
           resolve(res.data)
         }).catch(err => {
           reject(err)

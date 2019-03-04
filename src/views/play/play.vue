@@ -33,12 +33,22 @@
     }
 </style>
 <script>
+  import { Notification } from 'element-ui'
   import Player from './components/player2.vue'
   import Comment from './components/comment.vue'
   import CommentInput from './components/comment-input.vue'
   import Rec from './components/rec.vue'
   export default {
     mounted() {
+      this.$store.dispatch('checkCourseIfBought', this.$route.query.courseId).then(res => {
+        if (!res) {
+          Notification.error({
+            title: '错误',
+            message: '非法访问！'
+          })
+        }
+        return
+      })
     },
     data() {
       return {

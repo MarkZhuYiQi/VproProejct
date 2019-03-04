@@ -41,3 +41,9 @@ export function getOrderCourses(params) {
     params
   })
 }
+export function checkCourseIfBought(courseId) {
+  return request({
+    url: '/order/check/' + courseId,
+    method: 'get'
+  })
+}
