@@ -6,7 +6,7 @@
                     <img :src="cloudRoot + '/face.jpg'" alt="" />
                 </div>
                 <div class="panel-title">
-                    <span class="panel-title-name">{{this.auth_appid}}</span>
+                    <span class="panel-title-name">{{this.appId}}</span>
                     <span class="panel-title-greetings">，{{this.greeting}}</span>
                 </div>
                 <div class="panel-content">
@@ -160,6 +160,6 @@
       }
     },
     computed: {
-      ...mapGetters(['auth_appid', 'authId', 'cloudRoot'])
+      ...mapGetters(['appId', 'authId', 'cloudRoot'])
     }}
 </script>

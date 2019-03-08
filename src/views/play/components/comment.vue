@@ -13,16 +13,19 @@
                         </el-col>
                         <el-col :span="20">
                             <div class="comment-summary">
-                                <span class="user-name">{{item.auth_appid}}</span>
-                                <span class="time">{{item.vpro_comment_time}}</span>
+                                <span class="user-name">{{item.appId}}</span>
+                                <span class="time">{{item.vproCommentTime}}</span>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="replys" v-if="item.parent !== undefined">
-                                <div v-show="active_comments.indexOf(item.vpro_comment_id) === -1 && item.parent.length > 2" class="comment-omission">
+                            <div class="comment-content">
+                              <span>{{item.vproCommentContent}}</span>
+                            </div>
+                            <div class="replys" v-if="item.parents !== undefined && item.parents !== null">
+                                <div v-show="activeComments.indexOf(item.vproCommentId) === -1 && item.parents.length > 2" class="comment-omission">
                                     <a @click="showOmitComments(item)"> <i class="el-icon-more"></i> 显示更多 <i class="el-icon-more"></i> </a>
                                 </div>
                                 <!-- -------------------------------------------------------------------------------- -->
-                                <el-row :gutter="20" :class="{ comment: true, replyLine: (item.parent.length !== 1) && ((item.parent.length - 1) !== k) }" v-for="(v, k) in item.parent" :key="k" v-show="k === item.parent.length - 1 || active_comments.indexOf(item.vpro_comment_id) >= 0">
+                                <el-row :gutter="20" :class="{ comment: true, replyLine: (item.parents.length !== 1) && ((item.parents.length - 1) !== k) }" v-for="(v, k) in item.parents" :key="k" v-show="k === item.parents.length - 1 || activeComments.indexOf(item.vproCommentId) >= 0">
                                     <el-col :span="4">
                                         <div class="comment-avatar">
                                             <img :src="cloudRoot + '/face.jpg'" alt="">
@@ -30,19 +33,19 @@
                                     </el-col>
                                     <el-col :span="20">
                                         <div class="comment-summary">
-                                            <span class="user-name">{{v.auth_appid}}</span>
-                                            <span class="time">{{v.vpro_comment_time}}</span>
+                                            <span class="user-name">{{v.appId}}</span>
+                                            <span class="time">{{v.vproCommentTime}}</span>
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="comment-content">
-                                            <span>{{v.vpro_comment_content}}</span>
+                                            <span>{{v.vproCommentContent}}</span>
                                         </div>
                                         <div class="comment-support"
-                                             :courseId="v.vpro_commentCourseId"
-                                             :lessonId="v.vpro_comment_lessonId"
-                                             :reply_id="v.vpro_comment_reply_id"
-                                             :reply_main_id="v.vpro_comment_reply_main_id"
-                                             :comment_id="v.vpro_comment_id"
+                                             :courseId="v.vproCommentCourseId"
+                                             :lessonId="v.vproCommentLessonId"
+                                             :reply_id="v.vproCommentReplyId"
+                                             :reply_main_id="v.vproCommentReplyMainId"
+                                             :comment_id="v.vproCommentId"
                                         >
                                             <a @click="clickAgree(v)"><i class="el-icon-check"></i>({{v.agree}})</a>
                                             <a @click="clickOppose(v)"><i class="el-icon-close"></i>({{v.oppose}})</a>
@@ -64,19 +67,17 @@
                                                 <a slot="reference"><i class="el-icon-back"></i></a>
                                             </el-popover>
                                         </div>
-                                        <hr v-if="(item.parent.length !== 1) && ((item.parent.length - 1) !== k)">
+                                        <hr v-if="(item.parents.length !== 1) && ((item.parents.length - 1) !== k)">
                                     </el-col>
                                 </el-row>
                             </div>
-                            <div class="comment-content">
-                                <span>{{item.vpro_comment_content}}</span>
-                            </div>
+
                             <div class="comment-support"
-                                 :courseId="item.vpro_commentCourseId"
-                                 :lessonId="item.vpro_comment_lessonId"
-                                 :reply_id="item.vpro_comment_reply_id"
-                                 :reply_main_id="item.vpro_comment_reply_main_id"
-                                 :comment_id="item.vpro_comment_id"
+                                 :courseId="item.vproCommentCourseId"
+                                 :lessonId="item.vproCommentLessonId"
+                                 :reply_id="item.vproCommentReplyId"
+                                 :reply_main_id="item.vproCommentReplyMainId"
+                                 :comment_id="item.vproCommentId"
                             >
                                 <a @click="clickAgree(item)"><i class="el-icon-check"></i>({{item.agree}})</a>
                                 <a @click="clickOppose(item)"><i class="el-icon-close"></i>({{item.oppose}})</a>
@@ -220,7 +221,7 @@
 </style>
 <script>
   import commentsPagination from './comments-pagination.vue'
-  import { parseTime } from '@/utils/index'
+  import { parseTime, getCommentsId } from '@/utils/index'
   import { mapGetters } from 'vuex'
   export default{
     computed: {
@@ -239,13 +240,14 @@
         reply: '',
         pop_is_showed: true,
         comments: [],
-        active_comments: [],
+        activeComments: [],
         pages: {
           currentPage: 1,
           pageSize: 10,
           total: -1
         },
-        loading: false
+        loading: false,
+        rates: {}
       }
     },
     components: {
@@ -254,9 +256,10 @@
     methods: {
       combineComments() {
         this.getComment().then(res => {
-          if (res.comments_length > 0) {
-            this.commentsTimeConvert(res.comments)
-            this.getCommentSupportRate(res.comments_ids).then(res => {
+          console.log(res)
+          if (res.total > 0) {
+            this.commentsTimeConvert(res.commentList)
+            this.getCommentSupportRate(getCommentsId(res.commentList)).then(res => {
               this.addSupportRateToComments(res.data)
             })
           }
@@ -267,32 +270,22 @@
           if (c.hasOwnProperty('parent')) {
             this.commentsTimeConvert(c.parent)
           }
-          c.vpro_comment_time = parseTime(c.vpro_comment_time)
+          c.vproCommentTime = parseTime(c.vproCommentTime)
         }
       },
       handlePageChange(currentPage) {
         this.pages.currentPage = currentPage
       },
-      agree(comment_id) {
-        this.$store.dispatch('agree', { comment_id }).then(res => {
-          // 给点上+1
-        })
+      getCommentSupportRate(commentsId) {
+        return this.$store.dispatch('getCommentSupportRate', commentsId)
       },
-      reject(comment_id) {
-        this.$store.dispatch('reject', { comment_id }).then(res => {
-          // 给点上+1
-        })
-      },
-      getCommentSupportRate(comments_ids) {
-        return this.$store.dispatch('getCommentSupportRate', { comments_ids })
-      },
-      getComment(lessonId = this.lessonId, p = this.pages.currentPage) {
+      getComment(lessonId = this.lessonId, p = this.pages.currentPage, s = this.pages.pageSize) {
         this.loading = true
         return new Promise((resolve, reject) => {
-          this.$store.dispatch('getComment', { lessonId, p }).then((res) => {
+          this.$store.dispatch('getComment', { lessonId, p, s }).then((res) => {
             this.loading = false
-            this.comments = res.data.comments
-            this.pages.total = res.data.comments_length
+            this.comments = res.data.commentList
+            this.pages.total = res.data.total
             // resolve(res.data.comments_ids)
             resolve(res.data)
           }).catch(err => {
@@ -300,34 +293,35 @@
           })
         })
       },
-      addSupportRateToComments(agree_oppose) {
-        // console.log(agree_oppose)
+      addSupportRateToComments(rates) {
+        Object.assign(this.rates, rates)
+        console.log(this.rates)
         this.comments = this.comments.map((item, i) => {
-          if (item.hasOwnProperty('parent')) {
-            item.parent.map(value => {
-              for (const k in agree_oppose) {
-                if (value.vpro_comment_id === k) {
-                  [value['agree'], value['oppose']] = agree_oppose[k]
-                  return value
-                }
-              }
+          if (item.hasOwnProperty('parents') && item.parents !== null && item.parents.length > 0) {
+            item.parents.map(value => {
+              value['agree'] = this.rates[value.vproCommentId]['agree']
+              value['oppose'] = this.rates[value.vproCommentId]['oppose']
+              return value
             })
           }
-          [item['agree'], item['oppose']] = agree_oppose[item.vpro_comment_id]
+          item['agree'] = rates[item.vproCommentId]['agree']
+          item['oppose'] = rates[item.vproCommentId]['oppose']
           return item
         })
       },
       showOmitComments(obj) {
-        if (this.active_comments.indexOf(obj.vpro_comment_id) < 0) this.active_comments.push(obj.vpro_comment_id)
-        console.log((!this.active_comments.indexOf(obj.vpro_comment_id) === -1) && obj.parent.length > 2)
+        if (this.activeComments.indexOf(obj.vproCommentId) < 0) this.activeComments.push(obj.vproCommentId)
+        console.log((!this.activeComments.indexOf(obj.vproCommentId) === -1) && obj.parents.length > 2)
       },
       replyComment(obj) {
         this.$store.dispatch('setComment', {
-          commentCourseId: obj.vpro_commentCourseId,
-          comment_lessonId: obj.vpro_comment_lessonId,
-          comment_reply_id: obj.vpro_comment_id,
-          comment_reply_main_id: obj.vpro_comment_reply_main_id === '0' ? obj.vpro_comment_id : obj.vpro_comment_reply_main_id,
-          comment_content: this.reply
+          vproCommentCourseId: obj.vproCommentCourseId,
+          vproCommentLessonId: obj.vproCommentLessonId,
+          vproCommentReplyId: obj.vproCommentId,
+          vproCommentReplyMainId: obj.vproCommentReplyMainId === '0' ? obj.vproCommentId : obj.vproCommentReplyMainId,
+          vproCommentIsPublished: 1,
+          vproCommentTime: Math.floor(new Date().getTime() / 1000),
+          vproCommentContent: this.reply
         }).then(res => {
           this.$message({
             message: '回复成功',
@@ -340,7 +334,7 @@
         })
       },
       clickAgree(obj) {
-        this.$store.dispatch('getRateForbidden', { commentId: obj.vpro_comment_id }).then(res => {
+        this.$store.dispatch('getRateForbidden', { commentId: obj.vproCommentId }).then(res => {
           if (res >= 0) {
             this.$message.error('您已经点过这条评论了')
           } else {
@@ -349,7 +343,7 @@
         })
       },
       clickOppose(obj) {
-        this.$store.dispatch('getRateForbidden', { commentId: obj.vpro_comment_id }).then(res => {
+        this.$store.dispatch('getRateForbidden', { commentId: obj.vproCommentId }).then(res => {
           if (res >= 0) {
             this.$message.error('您已经点过这条评论了')
           } else {
@@ -365,23 +359,24 @@
        */
       changeSupportRate(v, type) {
         for (const i in this.comments) {
-          if (this.comments[i].hasOwnProperty('parent')) {
-            const parent = this.comments[i].parent
-            for (const k in parent) {
-              if (parent[k].vpro_comment_id === v.vpro_comment_id) {
-                parent[k][type] = parseInt(parent[k][type]) + 1
-                parent.splice(k, 1, parent[k])
+          if (this.comments[i].hasOwnProperty('parents')) {
+            const parents = this.comments[i].parents
+            for (const k in parents) {
+              if (parents[k].vproCommentId === v.vproCommentId) {
+                parents[k][type] = parseInt(parents[k][type]) + 1
+                parents.splice(k, 1, parents[k])
               }
             }
           }
-          if (this.comments[i].vpro_comment_id === v.vpro_comment_id) {
+          if (this.comments[i].vproCommentId === v.vproCommentId) {
             this.comments[i][type] = parseInt(this.comments[i][type]) + 1
             this.comments.splice(i, 1, this.comments[i])
           }
         }
-        this.$store.dispatch('setCommentSupportRate', { type, comment_id: v.vpro_comment_id, lessonId: v.vpro_comment_lessonId }).then(res => {
-          if (parseInt(res) > 0) {
-            this.$store.dispatch('setRateForbidden', { commentId: v.vpro_comment_id })
+        this.$store.dispatch('setCommentSupportRate', { commentAgree: type === 'agree', commentOppose: type !== 'agree', commentId: v.vproCommentId, lessonId: v.vproCommentLessonId }).then(res => {
+          console.log(res)
+          if (res) {
+            this.$store.dispatch('setRateForbidden', { commentId: v.vproCommentId })
           }
         })
       }

@@ -5,8 +5,8 @@
         </div>
         <el-card class="box-card">
             <div class="play-title">
-                <h2>{{lessonInfo.lesson_title}}</h2>
-                <h4>{{lessonInfo.detail_content}}</h4>
+                <h2>{{lessonInfo.lessonTitle}}</h2>
+                <h4>{{lessonInfo.detailContent}}</h4>
             </div>
             <div>
                 <span>简介</span>

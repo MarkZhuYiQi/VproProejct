@@ -115,15 +115,15 @@
                 </div>
             </el-col>
             <el-col :span="6">
-                <el-card class="detail-card">
+                <el-card class="detail-card" v-loading="recLoading">
                     <div slot="header" class="clearfix">
                         <span>相似课程推荐</span>
                         <!--<el-button style="float: right;" type="text">换一批</el-button>-->
                     </div>
                     <div v-for="(item, i) in recInfo" :key="i" class="text item rec">
-                        <img @click="jumpTo(item.courseId)" :src="item.courseCoverAddress + '?imageView2/2/w/243/h/135/format/jpg/q/100'" alt="">
-                        <span class="rec-title" @click="jumpTo(item.courseId)">{{item.courseTitle}}</span>
-                        <span class="rec-author">{{item.courseAuthor}}</span>
+                        <img style='width: 243px; height: 135px' @click="jumpTo(item.courseId)" :src="cloudRoot + '/' + item.vproCoursesCover.courseCoverKey + '?imageView2/2/w/243/h/135/format/jpg/q/100'" alt="">
+                        <span class="rec-title" @click="jumpTo(item.courseId)">{{ item.courseTitle }}</span>
+                        <span class="rec-author">{{item.vproAuth.authAppid}}</span>
                     </div>
                 </el-card>
             </el-col>
@@ -294,6 +294,7 @@
       this.$store.dispatch('loadCourse', this.$route.params.courseId).then((res) => {
         this.score = parseFloat(this.course.vproCoursesTempDetail.courseScore)
         this.$store.dispatch('loadCrumb', res.coursePid)
+        this.loadRec(res.coursePid)
       })
       this.$store.dispatch('loadLessonsList', this.$route.params.courseId).then(() => {
         let headFlag = false
@@ -328,7 +329,6 @@
         this.list = list
         console.log(list)
       })
-      this.loadRec()
     },
     data() {
       return {
@@ -336,6 +336,7 @@
         list: {},
         score: 0,
         recInfo: [],
+        recLoading: false,
         cartShowed: false
       }
     },
@@ -347,10 +348,11 @@
       handleClose() {
         this.cartShowed = false
       },
-      loadRec() {
-        const courseId = this.$route.params.courseId
-        if (courseId) {
-          this.$store.dispatch('getRecCourses', { courseId }).then(res => {
+      loadRec(navId) {
+        if (navId) {
+          this.recLoading = true
+          this.$store.dispatch('getRecCourses', this.$route.params.courseId).then(res => {
+            this.recLoading = false
             this.recInfo = res.data
           })
         }
@@ -482,8 +484,10 @@
         this.verifyCourse().then(res => {
           if (res) {
             for (const v of this.list[0].lesson) {
-              if (parseInt(v['lessonIsChapterHead']) === 0) this.videoStart(v)
-              break
+              if (parseInt(v['lessonIsChapterHead']) === 0) {
+                this.videoStart(v)
+                return
+              }
             }
             this.$message('还没有发布任何课时哦')
             return

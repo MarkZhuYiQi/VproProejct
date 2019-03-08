@@ -1,9 +1,8 @@
 import request from './../utils/request'
 
-export function getRecCourses(params) {
+export function getRecCourses(navId) {
   return request({
-    'url': '/api/vproplay/get-rec-courses',
-    'method': 'get',
-    params
+    'url': '/course/rec/' + navId,
+    'method': 'get'
   })
 }

@@ -125,3 +125,29 @@ export function currency(str) {
     return str + '.00'
   }
 }
+
+/**
+ * 将评论中所有的id拿出来
+ * @param obj
+ * @returns {Array}
+ */
+export function getCommentsId(obj) {
+  // const ids = [11, 14]
+  // console.log([11, 14, 15].filter(v => {
+  //   console.log(ids.indexOf(v) === -1)
+  //   return ids.indexOf(v) === -1
+  // }))
+  const ids = []
+  obj.map(item => {
+    if (item.parents !== null && item.parents.length > 0) {
+      ids.concat(item.parents.map(comment => {
+        return comment.vproCommentId
+      }).filter(v => {
+        return ids.indexOf(v) === -1
+      }))
+    }
+    if (ids.indexOf(item.vproCommentId) === -1) ids.push(item.vproCommentId)
+    return ids
+  })
+  return ids
+}

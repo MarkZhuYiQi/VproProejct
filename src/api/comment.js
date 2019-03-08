@@ -15,28 +15,28 @@ export function oppose(data) {
 }
 export function getComment(params) {
   return request({
-    url: '/api/comment/get-comment',
+    url: '/comment/' + params.lessonId,
     method: 'get',
     params
   })
 }
 export function getCommentSupportRate(data) {
   return request({
-    url: '/api/comment/get-comment-support-rate',
+    url: '/comment/get-rate',
     method: 'post',
     data
   })
 }
-export function setCommentSupportRate(params) {
+export function setCommentSupportRate(data) {
   return request({
-    url: '/api/comment/set-comment-support-rate',
-    method: 'get',
-    params
+    url: '/comment/support',
+    method: 'post',
+    data
   })
 }
 export function setComment(data) {
   return request({
-    url: '/api/comment/set-comment',
+    url: '/comment',
     method: 'post',
     data
   })

@@ -377,7 +377,7 @@
       }
     },
     computed: {
-      ...mapGetters(['cartInfo', 'orderInfo', 'cartItemDetail', 'authId', 'couponInfo', 'token', 'auth_appid', 'cloudRoot']),
+      ...mapGetters(['cartInfo', 'orderInfo', 'cartItemDetail', 'authId', 'couponInfo', 'token', 'appId', 'cloudRoot']),
       payment() {
         return this.$store.getters.payment
       },

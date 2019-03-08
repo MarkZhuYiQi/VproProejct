@@ -4,7 +4,7 @@ export default{
     comments: [],
     commentSupportRate: [],
     get commentsRateForbidden() {
-      const commentsRateForbidden = localStorage.getItem('comments_rate_forbidden')
+      const commentsRateForbidden = localStorage.getItem('commentsRateForbidden')
       if (commentsRateForbidden === null || commentsRateForbidden === undefined) {
         return false
       }
@@ -13,7 +13,7 @@ export default{
   },
   mutations: {
     SET_COMMENTS(state, data) {
-      state['comments'] = data
+      state['commentList'] = data
     },
     SET_COMMENTSUPPORTRATE(state, data) {
       state['commentSupportRate'] = data
@@ -77,7 +77,7 @@ export default{
       forbidden = forbidden ? JSON.parse(forbidden) : []
       if (forbidden.indexOf(commentId) === -1) {
         forbidden.push(commentId)
-        localStorage.setItem('comments_rate_forbidden', JSON.stringify(forbidden))
+        localStorage.setItem('commentsRateForbidden', JSON.stringify(forbidden))
       }
     },
     getRateForbidden(context, { commentId }) {
@@ -88,7 +88,6 @@ export default{
     },
     setComment(context, data) {
       return new Promise((resolve, reject) => {
-        data['user_id'] = context.getters['authId']
         console.log(data)
         setComment(data).then(res => {
           resolve(res)

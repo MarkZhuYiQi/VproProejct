@@ -47,7 +47,7 @@
   import { mapGetters } from 'vuex'
   export default{
     mounted() {
-      this.userName = this.auth_appid
+      this.userName = this.appId
       if (Object.keys(this.$route.query).length > 0) {
         [this.courseId, this.lessonId] = [this.$route.query.courseId, this.$route.query.lessonId]
       }
@@ -79,7 +79,15 @@
       postComment() {
         this.$refs['commentInput'].validate((valid) => {
           if (valid) {
-            this.$store.dispatch('setComment', { 'commentCourseId': this.courseId, 'comment_lessonId': this.lessonId, 'comment_reply_id': 0, 'comment_reply_main_id': 0, 'comment_content': this.commentInput.commentContentInput }).then(res => {
+            this.$store.dispatch('setComment', {
+              'vproCommentCourseId': this.courseId,
+              'vproCommentLessonId': this.lessonId,
+              'vproCommentReplyId': 0,
+              'vproCommentReplyMainId': 0,
+              'vproCommentIsPublished': 1,
+              'vproCommentTime': Math.floor(new Date().getTime() / 1000),
+              'vproCommentContent': this.commentInput.commentContentInput
+            }).then(res => {
               if (res.data >= 1) {
                 this.$message({
                   message: '评论发送成功',
@@ -95,7 +103,7 @@
       }
     },
     computed: {
-      ...mapGetters(['auth_appid', 'cloudRoot'])
+      ...mapGetters(['appId', 'cloudRoot'])
     }
   }
 </script>

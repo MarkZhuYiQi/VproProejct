@@ -3,7 +3,7 @@ const getters = {
   cloudRoot: state => state.constant.cloudRoot,
   // userModule
   getStep: state => state.user.step,
-  auth_appid: state => state.user.userObj.auth_appid,
+  appId: state => state.user.userObj.appId,
   authId: state => state.user.userObj.authId,
   token: state => state.user.userObj.token,
   loginRequired: state => state.user.loginRequired,

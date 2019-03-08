@@ -3,13 +3,13 @@
         <el-row class="rec-card" :gutter="10" v-for="(item, i) in recInfo" :key="i" v-if="recInfo.length">
             <el-col :span="10">
                 <div>
-                    <img :style="{ width: recSize.width + 'px', height: recSize.height + 'px' }" :src="item.courseCoverAddress" alt="" @click="jumpTo(item.courseId)">
+                    <img :style="{ width: recSize.width + 'px', height: recSize.height + 'px' }" :src="cloudRoot + '/' + item.vproCoursesCover.courseCoverKey" alt="" @click="jumpTo(item.courseId)">
                 </div>
             </el-col>
             <el-col :span="14">
                 <div>
                     <span class="rec-title">{{item.courseTitle}}</span>
-                    <span class="rec-author">{{item.courseAuthor}}</span>
+                    <span class="rec-author">{{item.vproAuth.authAppid}}</span>
                 </div>
             </el-col>
         </el-row>
@@ -37,6 +37,7 @@
     }
 </style>
 <script>
+  import { mapGetters } from 'vuex'
   export default {
     mounted() {
       this.loadRec()
@@ -46,6 +47,9 @@
     },
     destroyed() {
       window.removeEventListener('resize', this.handleResize)
+    },
+    computed: {
+      ...mapGetters(['cloudRoot'])
     },
     data() {
       return {
@@ -59,8 +63,9 @@
     methods: {
       loadRec() {
         const courseId = this.$route.query.courseId
+        console.log(courseId)
         if (courseId) {
-          this.$store.dispatch('getRecCourses', { courseId }).then(res => {
+          this.$store.dispatch('getRecCourses', courseId).then(res => {
             this.recInfo = res.data
             console.log(this.recInfo)
           })
