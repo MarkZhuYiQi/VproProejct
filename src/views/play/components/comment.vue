@@ -267,8 +267,8 @@
       },
       commentsTimeConvert(comments) {
         for (const c of comments) {
-          if (c.hasOwnProperty('parent')) {
-            this.commentsTimeConvert(c.parent)
+          if (c.hasOwnProperty('parents') && c.parents !== null) {
+            this.commentsTimeConvert(c.parents)
           }
           c.vproCommentTime = parseTime(c.vproCommentTime)
         }

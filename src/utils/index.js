@@ -137,10 +137,10 @@ export function getCommentsId(obj) {
   //   console.log(ids.indexOf(v) === -1)
   //   return ids.indexOf(v) === -1
   // }))
-  const ids = []
+  let ids = []
   obj.map(item => {
     if (item.parents !== null && item.parents.length > 0) {
-      ids.concat(item.parents.map(comment => {
+      ids = ids.concat(item.parents.map(comment => {
         return comment.vproCommentId
       }).filter(v => {
         return ids.indexOf(v) === -1
