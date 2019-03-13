@@ -47,7 +47,7 @@
             message: '非法访问！'
           })
         }
-        return
+        this.$router.push({ path: '/' })
       })
     },
     data() {

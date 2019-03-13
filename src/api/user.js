@@ -14,3 +14,10 @@ export function getInfo() {
     method: 'get'
   })
 }
+
+export function logOut() {
+  return request({
+    url: '/login/out',
+    method: 'get'
+  });
+}

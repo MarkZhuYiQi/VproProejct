@@ -18,6 +18,15 @@ export default{
     }
   },
   actions: {
+    testPay({ commit }) {
+      return new Promise((resolve, reject) => {
+        console.log('testPay')
+        pay().then(res => {
+          console.log(res)
+          resolve(res.data)
+        })
+      })
+    },
     putOrder({ commit }, data) {
       return new Promise((resolve, reject) => {
         putOrder(data).then(res => {

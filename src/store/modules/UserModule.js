@@ -3,7 +3,7 @@
  */
 import Vue from 'vue'
 import Axios from 'axios'
-import { userLogin, getInfo } from '@/api/user'
+import { userLogin, getInfo, logOut } from '@/api/user'
 import { KJUR, b64utoutf8 } from 'jsrsasign'
 export default{
   state: {
@@ -133,6 +133,7 @@ export default{
     },
     frontUserLogout(context, callback) {
       const userInfo = context.state.userObj
+      logOut()
       Object.keys(userInfo).map(item => {
         localStorage.removeItem(item)
       })

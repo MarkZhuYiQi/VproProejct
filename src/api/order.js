@@ -27,11 +27,10 @@ export function putOrder(data) {
     data
   })
 }
-export function pay(params) {
+export function pay() {
   return request({
-    url: '/api/order/pay',
-    method: 'get',
-    params
+    url: '/pay',
+    method: 'post'
   })
 }
 export function getOrderCourses(params) {

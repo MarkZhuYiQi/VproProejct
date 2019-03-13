@@ -37,6 +37,7 @@
                         <div  class="main-btn">
                             <el-button type="primary" size="large" @click="punchPlayBtn">立即参加</el-button>
                             <el-button type="text" @click="addToCart">加入购物车</el-button>
+                            <el-button type="primary" @click="handleTestPay">测试支付</el-button>
                         </div>
                         <div class="main-share">
                             <el-button type="primary" icon="star-off"></el-button>
@@ -341,6 +342,15 @@
       }
     },
     methods: {
+      handleTestPay() {
+        console.log('testPay')
+        const w = window.open('', '支付窗口')
+        this.$store.dispatch('testPay').then(res => {
+          console.log(res)
+          w.document.open()
+          w.document.write(res)
+        })
+      },
       handleAttendBtn() {
         this.addToCart()
         this.cartShowed = false
@@ -370,6 +380,10 @@
        * 进入视频播放
        */
       enterVideo(obj) {
+        if (!this.authId) {
+          this.$root.$emit('showLogin')
+          return
+        }
         if (parseInt(this.course.coursePrice) > 0) {
           this.verifyCourse().then(res => {
             if (!res) {
@@ -481,7 +495,12 @@
         window.location.href = 'http://' + window.location.host + '/#/play/?' + 'courseId=' + this.$route.params.courseId + '&' + 'lessonId=' + obj.lessonId
       },
       punchPlayBtn() {
+        if (!this.authId) {
+          this.$root.$emit('showLogin')
+          return
+        }
         this.verifyCourse().then(res => {
+          console.log('verifyCourse', res)
           if (res) {
             for (const v of this.list[0].lesson) {
               if (parseInt(v['lessonIsChapterHead']) === 0) {

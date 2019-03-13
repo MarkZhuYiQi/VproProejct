@@ -250,7 +250,7 @@
 </style>
 <script>
   import { mapGetters } from 'vuex'
-  import { checkLocalData, getLocalData } from '@/utils/auth'
+  // import { checkLocalData, getLocalData } from '@/utils/auth'
   import { deepCopy } from '@/utils/index'
   import { verifyTokenExpiration } from '@/utils/auth'
 
