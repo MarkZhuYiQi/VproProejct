@@ -33,7 +33,7 @@
                                 <el-col :span="8" v-if="items.orderPayment==0">等待支付</el-col>
                                 <el-col :span="8" v-if="items.orderPayment==1">交易成功</el-col>
                                 <el-col :span="8" v-if="items.orderPayment==2">交易失败</el-col>
-                                <el-col :span="8" v-if="items.orderPayment==0"><el-button @click="pay(i)">立即支付</el-button></el-col>
+                                <el-col :span="8" v-if="items.orderPayment==0"><el-button @click="pay(items.orderId)">立即支付</el-button></el-col>
                             </el-row>
                         </el-col>
                     </el-row>
@@ -89,9 +89,12 @@
     },
     methods: {
       pay(orderId) {
+        console.log(orderId)
         const w = window.open()
-        this.$store.dispatch('pay', { orderId }).then(res => {
-          w.location.href = res.data.pay_url
+        this.$store.dispatch('pay', orderId).then(res => {
+          if (res.code !== 200) return
+          w.document.open()
+          w.document.write(res.data)
         })
       },
       jumpTo(courseId) {

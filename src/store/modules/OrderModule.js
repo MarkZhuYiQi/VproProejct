@@ -1,4 +1,4 @@
-import { putOrder, getOrders, getOrderCourses, pay } from '@/api/order'
+import { putOrder, getOrders, getOrderCourses, pay, testPay } from '@/api/order'
 import { dateFormat } from '@/utils/index'
 export default{
   state: {
@@ -21,7 +21,7 @@ export default{
     testPay({ commit }) {
       return new Promise((resolve, reject) => {
         console.log('testPay')
-        pay().then(res => {
+        testPay().then(res => {
           console.log(res)
           resolve(res.data)
         })

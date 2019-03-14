@@ -27,7 +27,13 @@ export function putOrder(data) {
     data
   })
 }
-export function pay() {
+export function pay(orderId) {
+  return request({
+    url: '/pay/' + orderId,
+    method: 'get'
+  })
+}
+export function testPay() {
   return request({
     url: '/pay',
     method: 'post'
