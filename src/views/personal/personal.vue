@@ -28,7 +28,7 @@
                             <el-col :span="6" v-for="(item,i) in courses" :key="i">
                                 <el-card :body-style="{ padding: '0px' }">
                                     <div class="image" @click="jumpTo(item.courseId)">
-                                        <img :src="item.courseCoverAddress+'?imageView2/1/w/276/h/153/format/jpg/interlace/1/q/100'">
+                                        <img :src="cloudRoot + item.vproCoursesCover.courseCoverAddress + item.vproCoursesCover.courseCoverKey + '?imageView2/1/w/276/h/153/format/jpg/interlace/1/q/100'">
                                     </div>
                                     <div class="des">
                                         <span class="projectTitle" @click="jumpTo(item.courseId)">{{item.courseTitle}}</span>
@@ -150,7 +150,7 @@
         console.log(tab, event)
       },
       getMyCourses() {
-        this.$store.dispatch('getMyCourses', { user_id: this.authId }).then(res => {
+        this.$store.dispatch('getMyCourses').then(res => {
           this.courses = res.data
           console.log(this.courses)
         })

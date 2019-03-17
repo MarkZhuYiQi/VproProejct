@@ -1,8 +1,7 @@
 import request from './../utils/request'
-export function getMyCourses(params) {
+export function getMyCourses() {
   return request({
-    'url': '/api/order/get-my-courses',
-    'method': 'get',
-    params
+    url: '/order/personal',
+    method: 'get'
   })
 }
