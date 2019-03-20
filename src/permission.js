@@ -19,12 +19,13 @@ router.beforeEach((to, from, next) => {
         // 否则就去获取登录信息，获取成功直接下一页
         store.dispatch('getInfo').then(res => {
           next()
+          console.log(res)
         }).catch(err => {
           // 没拿到登录信息，注销重新登陆吧
-          store.dispatch('frontUserLogout').then(() => {
-            Message.error(err || 'Verification failed, please login again')
-            next({ path: '/' })
-          })
+          // store.dispatch('frontUserLogout').then(() => {
+          //   Message.error(err || 'Verification failed, please login again')
+          //   next({ path: '/' })
+          // })
         })
       }
     } else {

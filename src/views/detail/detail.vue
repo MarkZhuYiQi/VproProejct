@@ -37,7 +37,7 @@
                         <div  class="main-btn">
                             <el-button type="primary" size="large" @click="punchPlayBtn">立即参加</el-button>
                             <el-button type="text" @click="addToCart">加入购物车</el-button>
-                            <el-button type="primary" @click="handleTestPay">测试支付</el-button>
+                            <!--<el-button type="primary" @click="handleTestPay">测试支付</el-button>-->
                         </div>
                         <div class="main-share">
                             <el-button type="primary" icon="star-off"></el-button>

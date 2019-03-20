@@ -171,12 +171,12 @@ s3usGiDpXPS2HmH5fQIDAQAB
             this.loading = true
             this.$store.dispatch('frontUserLogin', { data: encrypt(this.loginForm, pubKey) }).then(() => {
               this.loading = false
+              location.reload()
               if (this.$route.query.hasOwnProperty('s')) {
                 w.location.href = w.location.protocol + '//' + this.$route.query.s
-                location.reload()
               } else {
+                // location.reload()
                 this.$router.push({ path: '/' })
-                location.reload()
               }
               return false
             }).catch(() => {

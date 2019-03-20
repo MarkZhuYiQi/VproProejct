@@ -46,8 +46,8 @@
             title: '错误',
             message: '非法访问！'
           })
+          this.$router.push({ path: '/' })
         }
-        this.$router.push({ path: '/' })
       })
     },
     data() {

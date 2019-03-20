@@ -113,7 +113,6 @@ s3usGiDpXPS2HmH5fQIDAQAB
         ? MODAL_WIDTH / 2
         : MODAL_WIDTH
       this.isLogin = !!((this.token) && verifyTokenExpiration(this.token))
-      console.log(this.token, verifyTokenExpiration(this.token))
     },
     mounted() {
       this.$root.$on('showLogin', function() {

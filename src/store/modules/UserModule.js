@@ -116,7 +116,7 @@ export default{
             console.log(payload)
             if (payload.id && payload.appid) {
               const userObj = {
-                authId: payload.authid,
+                authId: payload.id,
                 appId: payload.appid,
                 token: token
               }
@@ -140,8 +140,10 @@ export default{
       location.reload()
     },
     getInfo({ commit, state }) {
+      console.log(localStorage.getItem('token'))
+      return false
       return new Promise((resolve, reject) => {
-        getInfo(state.userObj.token).then(response => {
+        getInfo().then(response => {
           const data = response.data
           const userObj = { authId: data.authId, appId: data.authAppid, token: localStorage.getItem('token') }
           commit('SET_USER_DATA', { data: userObj })
