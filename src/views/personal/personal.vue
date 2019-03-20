@@ -22,8 +22,11 @@
                     :on-icon-click="handleClick">
             </el-input>
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="课程" name="first">
-                    <div class="cards-container">
+                <el-tab-pane label="课程" name="first" v-loading="personalDataLoading">
+                    <div class="cards-container" v-if="personalDataLoading">
+                        <div style="padding: 150px"></div>
+                    </div>
+                    <div class="cards-container" v-if="!personalDataLoading">
                         <el-row :gutter="30">
                             <el-col :span="6" v-for="(item,i) in courses" :key="i">
                                 <el-card :body-style="{ padding: '0px' }">
@@ -142,7 +145,8 @@
         activeName: 'first',
         input: '',
         greeting: '',
-        courses: []
+        courses: [],
+        personalDataLoading: false
       }
     },
     methods: {
@@ -150,7 +154,9 @@
         console.log(tab, event)
       },
       getMyCourses() {
+        this.personalDataLoading = true
         this.$store.dispatch('getMyCourses').then(res => {
+          this.personalDataLoading = false
           this.courses = res.data
           console.log(this.courses)
         })

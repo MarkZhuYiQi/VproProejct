@@ -121,8 +121,8 @@ export default{
                 token: token
               }
               console.log(userObj)
-              context.commit('SET_USER_DATA', { data: userObj })
               context.commit('SET_LOCALSTORAGE_DATA', { data: userObj })
+              context.commit('SET_USER_DATA', { data: userObj })
               resolve(res)
             }
           }
@@ -140,14 +140,13 @@ export default{
       location.reload()
     },
     getInfo({ commit, state }) {
-      console.log(localStorage.getItem('token'))
-      return false
+      // return false
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
+        getInfo(localStorage.getItem('token')).then(response => {
           const data = response.data
           const userObj = { authId: data.authId, appId: data.authAppid, token: localStorage.getItem('token') }
-          commit('SET_USER_DATA', { data: userObj })
           commit('SET_LOCALSTORAGE_DATA', { data: userObj })
+          commit('SET_USER_DATA', { data: userObj })
           resolve(response)
         }).catch(error => {
           reject(error)
