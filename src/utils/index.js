@@ -89,7 +89,7 @@ export function deepCopy(p, c) {
 // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
 export function dateFormat(time, fmt) {
   // author: meizz
-  time = new Date(parseInt(time + '000'))
+  time = new Date(parseInt(time.toString() + '000'))
   const o = {
     'M+': time.getMonth() + 1, // 月份
     'd+': time.getDate(), // 日

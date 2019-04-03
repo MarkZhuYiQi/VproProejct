@@ -6,10 +6,9 @@
         <div class="des">
             <span class="projectTitle"><a @click="jumpTo(sum.courseId)">{{sum.courseTitle}}</a></span>
             <div class="bottom clearfix">
-                <time class="time">{{  }}</time>
+                <time class="time">{{ sum.courseTime }}</time>
                 <div class="price">
-                    <span class="original-price" v-if="parseFloat(sum.courseDiscountPrice).toFixed(2) !== '-1.00'">{{sum.courseDiscountPrice}}</span>
-                    <span class="discount-price">{{sum.coursePrice}}</span>
+                    <span class="discount-price">{{ this.sum.coursePrice === 0 ? '免费' : parseFloat(this.sum.coursePrice).toFixed(2) }}</span>
                 </div>
             </div>
         </div>
@@ -109,7 +108,6 @@
       ...mapGetters(['cloudRoot'])
     },
     created() {
-      if (parseFloat(this.sum.coursePrice).toFixed(2) === '0.00') this.sum.coursePrice = '免费'
       this.sum.courseTime = dateFormat(this.sum.courseTime, 'yyyy-MM-dd')
     },
     data() {

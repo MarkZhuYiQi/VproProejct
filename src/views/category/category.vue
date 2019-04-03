@@ -4,7 +4,7 @@
         <div style="padding: 15px 10px; background-color: #ffffff; margin: 10px 0 0 0">
             <bread-crumb></bread-crumb>
         </div>
-        <el-row :gutter="20" v-if="coursesList.length !== 0">
+        <el-row :gutter="18" v-if="coursesList.length !== 0">
             <el-col :span="6" v-for="(item,i) in coursesList" :key="i">
                 <category-card :info="item"></category-card>
             </el-col>
